@@ -1,7 +1,6 @@
 # blockchain_mask
 
-## 이더리움 스마트컨트랙트를 활용한 
-## 신뢰받는 마스크 관리 시스템 구축
+## 이더리움 스마트컨트랙트를 활용한 신뢰받는 마스크 관리 시스템 구축
 
   
 ![image](https://user-images.githubusercontent.com/42461455/78424581-96d03700-76a9-11ea-9445-64885f93d197.png)
