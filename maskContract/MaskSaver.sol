@@ -146,15 +146,57 @@ contract MaskSaver {
     string public seller;
     
     uint256 public serialNumber;
+    uint256 public mask500;
     
-    bool public turnOn;
-    bool public turnDown;
+    bool public factoryOn;
+    bool public sellerOpen;
     
+    uint256 public errorRange;
+    
+    // event that communicate with things.
     event MaskProduction(string _maskFactoryName, uint256 _MaskQuantity);
     event manufacturerToDistributor(string _manufacturerName, string _distributorName);
     event DistributorToSeller(string _distributorName, string _sellerName);
     event MaskQuantityCheck(string _maskFactoryName, uint256 _MaskQuantity);
     
-    // Mask make start on factory
-    constructor
+    constructor(string memory _manufacturerName, string memory _distributorName, string memory _sellerName) public {
+        
+        owner = msg.sender;
+        manufacturer = _manufacturerName;
+        distributor = _distributorName;
+        seller = _sellerName;
+        errorRange = 5;
+    }
+    
+    // Access control
+    modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+    
+    // Boolen to know factory open 
+    modifier closeFactory {
+        require(factoryOn == false);
+        _;
+    }
+    
+    // Boolen to know seller open
+    modifier closeSeller {
+        require(sellerOpen == false);
+        _;
+    }
+    
+    function setErrorRange(uint256 _range) external onlyOwner { //Temporary function to set the error range.
+        errorRange = _range;
+    }
+    
+    function startMaking(uint256 _MaskQuantity) external onlyOwner {
+        factoryOn = true;
+        
+        if (mask500 >= 500) {
+            // QR code make!
+        }
+    }
+    
+    
 }
