@@ -76,9 +76,10 @@ let contractAddress = "0x26f820bb2e13dc64996a4ddc23f7b6e110e31623";
 let fromAddress = "0xf7ae4a72de695e3e1afff12b53585807bf0bbe57";
 let contract = new web3.eth.Contract(contractAbi, contractAddress);
 //let private = "4d4b6e3ff68e2287296c124b1b620268eadad3c7269cb086a00d8ec8948d92d2";
-contract.methods.getBalance(fromAddress).call().then(console.log);
+//contract.methods.getBalance(fromAddress).call().then(console.log);
 
-contract.methods.transfer("0xaaa61aa05a9df70eae8e9dba9161825ea1e52dd2","1")//Function in contract
+/*
+contract.methods.transfer("0xaaa61aa05a9df70eae8e9dba9161825ea1e52dd2","1")
 .send({from : "0xf7ae4a72de695e3e1afff12b53585807bf0bbe57"}, function(err, result){
 	if(err){
 		console.log(err);
@@ -86,7 +87,22 @@ contract.methods.transfer("0xaaa61aa05a9df70eae8e9dba9161825ea1e52dd2","1")//Fun
 		console.log(result);
 	}
 });
+*/
 
+exports.sendTransfer = function(req, res){
+	try{
+		contract.methods.transfer("0xaaa61aa05a9df70eae8e9dba9161825ea1e52dd2","1")
+		.send({from : "0xf7ae4a72de695e3e1afff12b53585807bf0bbe57"}, function(err, result){
+			if(err){
+				res.send(err);
+			}else{
+				res.send(result);
+			}
+		});
+	}catch{
+		res.send("error");
+	}
+}
 
 /* deprecated
 let tx_builder = contract.methods.transfer("0xaaa61aa05a9df70eae8e9dba9161825ea1e52dd2","1");
