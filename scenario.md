@@ -4,53 +4,55 @@
 
 0. 마스크 struct
 	1. 구조체
-	- 제조사에서 만들어준 SerialNum => timestamp
-	- 제조사
-	- 예상 유통사
-	- 실제 유통사
-	- 예상 판매사
-	- 실제 판매사
+		- 제조사에서 만들어준 SerialNum => timestamp
+		- 제조사
+		- 예상 유통사
+		- 실제 유통사
+		- 예상 판매사
+		- 실제 판매사
 	2. 마스크 생성시 제조사 와 serialNum 입력되어야함.
-		1. 파라미터 : SerialNum, 제조사ID
-		2. 변수 :
-		3. 컨트랙함수 : ~~createMask(string _SerialNum, string _makerId)~~ => startMaskMaking(uint256 _MaskQuantity)
-		4. 이벤트 : 마스크 구조체 생성
-		5. 기타 : 제조사에서 요 함수를 쓰면될듯
+		- 파라미터 : SerialNum, 제조사ID
+		- 변수 :
+		- 컨트랙함수 : ~~createMask(string _SerialNum, string _makerId)~~ => startMaskMaking(), stopMaskMaking() 
+		- 이벤트 : 마스크 구조체 생성
+		- 기타 : 제조사에서 요 함수를 쓰면될듯
 		
 	3. SerialNum에 맞는 마스크 찾아서 리턴해줘야함.
-		1. 파라미터 : SerialNum
-		2. 변수 :
-		3. 컨트랙함수 : ~~getMaskInfo(string _SerialNum)~~ =>
-				getManufacturerName()
+		- 파라미터 : SerialNum
+		- 변수 :
+		>> - 컨트랙함수 : ~~getMaskInfo(string _SerialNum)~~ =>
 				getMaskProductionDate(uint256 _index)
 				getMaskProductionAddr(uint256 _index)
 				getMaskQuantity(address _manufacturerAddr)
-		4. 이벤트 : ~~마스크 구조체 변수들 다 리턴해주기~~ =? 각각 함수별 리턴
-		5. 기타 : 
+		- 이벤트 : ~~마스크 구조체 변수들 다 리턴해주기~~ =? 각각 함수별 리턴
+		- 기타 : 
 	
 1. 제조사(maker)
 	구조체
-	- makerId(ex.001) 첫째자리 0으로시작 
-	- 일일 마스크 생산량 => 타
-	- 보유중인 마스크 serialNum 배열 -> 재고량 배열크기로 체크하면될듯
+	- ~~makerId(ex.001)~~ manufacturerName ~~첫째자리 0으로시작~~ string으로?
+	- 일일 마스크 생산량 => uint256 maskAmountOutput
+	- 보유중인 마스크 serialNum 배열 -> ~~재고량 배열크기로 체크하면될듯~~ 배열에 다 넣어야해서 비효율적일듯
+		=> uint256 maskAmountHave 하루 생산 완료시마다 수량 늘려주는 변수
+		=> maskIndex는 어떤 변수인지?
 	
 	1.0. 제조사 정보 리턴
 		파라미터 : makerId,
 		변수 :  
-        컨트랙함수 : getMakerInfo(string makerId)
+        >> 컨트랙함수 : ~~getMakerInfo(string makerId)~~ => getManufacturerName() 
+	### 이부분 위에 3. SerialNum에 맞는 마스크 찾아서 리턴해줘야함.과 다를게 무엇인지에 대한 고찰필요
         이벤트 : 구조체 변수들 리턴
 		기타 : 
 		
 	1.1. 1box 제조시 시리얼번호를 부여한다.(시리얼 = timestamp)
         파라미터 : SerialNum(배열일 수 있음), 제조할 box개수,
 		변수 :  
-        컨트랙함수 : createMaskbox(string[] _SerialNumArray)
+        컨트랙함수 : ~~createMaskbox(string[] _SerialNumArray)~~ => startMaskMaking(uint256 _MaskQuantity)
         이벤트 : 파라미터로 받은 배열의 SerialNum들과 makerId를 이용해 마스크구조체 생성, SerialNumArray들 마스크재고배열에 추가
 		리턴 : 
-		기타 : 웹에서 시리얼번호 쏴주기
+		기타 : 웹에서 시리얼번호 쏴주기 => \*\*이거 고민해보기!\*\*
         
 	1.2. 박스 단위로 유통사와 계약한다.
-		파라미터 : 마스크 시리얼넘버 배열, 계약할 유통사, 계약할 box 개수
+		파라미터 : 마스크 시리얼넘버 배열 \*\*배열이 너무 커질것 회의 필요\*\* , 계약할 유통사, 계약할 box 개수
         변수 : 
         컨트랙함수 : contractTodealer(string[] _SerialNumArray, string dealerID)
         이벤트 : 마스크 구조체에 예상 유통사 추가하고 제조사 마스크재고배열에서 SerialNumArray들 뺀다.
