@@ -153,9 +153,9 @@ contract MaskSaver {
     
     struct manufacturer {
         string manufacturerName;
-        uint256 maskAmountOutput;
-        uint256 maskAmountHave;
-        uint256 maskIndex;
+        uint256 maskAmountOutput; // 회사 하루 생산량
+        uint256 maskAmountHave; // 회사가 보유한 마스크 수량
+        uint256 maskIndex; // 이게 뭐지?
     }
     
     mapping (address => manufacturer) manufacturers;
@@ -170,7 +170,6 @@ contract MaskSaver {
     uint256 public index;
     uint256 public temp;
     
-    // event that communicate with things.
     event MaskProduction(string _maskFactoryName, uint256 _MaskQuantity, string _statusMessage);
     event manufacturerToDistributor(string _manufacturerName, string _distributorName, string _statusMessage);
     event MaskQuantityCheck(string _maskFactoryName, uint256 _MaskQuantity, string _statusMessage);
@@ -206,6 +205,14 @@ contract MaskSaver {
         errorRange = _range;
     }
     
+    /**
+     * 마스크 메이킹
+     * 마스크 수량을 input으로 받아 하루 생산량 만큼 while문을 돌아 생산함
+     * temp 변수에 500개씩 만들어질때마다 sub하고
+     * index를 하나씩 늘린다
+     * 아두이노를 사용해 하나씩 집계한다고 생각했을때 하나씩 생산될때마다 집계하는 과정 필요?
+     * emit 쪽과 while문 사이의 연동?
+     */
     function startMaskMaking(uint256 _MaskQuantity) external onlyOwner {
         factoryOn = true;
         newMaskAmount = _MaskQuantity;
