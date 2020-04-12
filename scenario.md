@@ -3,30 +3,30 @@
 마스크 500개 => 1box로 정의 요기서 한개 두개로 하면 백엔드에서 *500개 처리함
 
 0. 마스크 struct
-	구조체
+	0.1.구조체
 	- 제조사에서 만들어준 SerialNum => timestamp
 	- 제조사
 	- 예상 유통사
 	- 실제 유통사
 	- 예상 판매사
 	- 실제 판매사
-	0.1 마스크 생성시 제조사 와 serialNum 입력되어야함.
-		-파라미터 : SerialNum, 제조사ID
-		-변수 :
-		-컨트랙함수 : ~~createMask(string _SerialNum, string _makerId)~~ => startMaskMaking(uint256 _MaskQuantity)
-		-이벤트 : 마스크 구조체 생성
-		-기타 : 제조사에서 요 함수를 쓰면될듯
+	0.1.1. 마스크 생성시 제조사 와 serialNum 입력되어야함.
+		1. 파라미터 : SerialNum, 제조사ID
+		2. 변수 :
+		3. 컨트랙함수 : ~~createMask(string _SerialNum, string _makerId)~~ => startMaskMaking(uint256 _MaskQuantity)
+		4. 이벤트 : 마스크 구조체 생성
+		5. 기타 : 제조사에서 요 함수를 쓰면될듯
 		
-	0.2 SerialNum에 맞는 마스크 찾아서 리턴해줘야함.
-		-파라미터 : SerialNum
-		-변수 :
-		-컨트랙함수 : ~~getMaskInfo(string _SerialNum)~~ =>
+	0.1.2. SerialNum에 맞는 마스크 찾아서 리턴해줘야함.
+		1. 파라미터 : SerialNum
+		2. 변수 :
+		3. 컨트랙함수 : ~~getMaskInfo(string _SerialNum)~~ =>
 				getManufacturerName()
 				getMaskProductionDate(uint256 _index)
 				getMaskProductionAddr(uint256 _index)
 				getMaskQuantity(address _manufacturerAddr)
-		-이벤트 : ~~마스크 구조체 변수들 다 리턴해주기~~ =? 각각 함수별 리턴
-		-기타 : 
+		4. 이벤트 : ~~마스크 구조체 변수들 다 리턴해주기~~ =? 각각 함수별 리턴
+		5. 기타 : 
 	
 1. 제조사(maker)
 	구조체
