@@ -54,7 +54,7 @@
 	4. 박스 단위로 유통사와 계약한다.
 		- 파라미터 : 마스크 시리얼넘버 배열 \\ __배열이 너무 커질것 회의 필요__ , 계약할 유통사, 계약할 box 개수
         	- 변수 : 
-        	- 컨트랙함수 : contractTodealer(string[] _SerialNumArray, string dealerID)
+        	- 컨트랙함수 : manufacturerToDealer(string[] _SerialNumArray, string dealerID)
         	- 이벤트 : 마스크 구조체에 예상 유통사 추가하고 제조사 마스크재고배열에서 SerialNumArray들 뺀다.
 		- 리턴 : SerialNumArray 리턴해야할듯.
         
@@ -74,18 +74,18 @@
 		- 파라미터 : dealerId,
 		- 변수 :  
         	- 컨트랙함수 : ~~getdealerInfo(string dealerId)~~ => __getDealerName()__
-        	- 이벤트 : __contractSign(string _manufacturerName, string _DealerName, string _statusMessage)__
+        	- 이벤트 :
 		- 기타 : 
 	3. ~~제조사로부터 납품받은 마스크 처리~~ __자동으로 구조체 개수에 추가시킴__
-		- 파라미터 : SerialNumArray
-        	- 변수 : 
-        	- 컨트랙함수 : addMaskBox(string[] SerialNumArray)
-        	- 이벤트 : SerialNumArray를 마스크 재고 배열에 추가
+		~~- 파라미터 : SerialNumArray
+        	~~- 변수 : 
+        	~~- 컨트랙함수 : addMaskBox(string[] SerialNumArray)
+        	~~- 이벤트 : SerialNumArray를 마스크 재고 배열에 추가~~
 	4. 박스 단위로 판매점에 납품
 		- 파라미터 : 마스크 serialNum 배열, 계약할 판매사, 계약할 box 개수
         	- 변수 : 
         	- 컨트랙함수 : contractToseller(string[] _SerialNumArray, string dealerId)
-        	- 이벤트 : 마스크 구조체에 계약할 판매사 ID를 예상 판매사에 넣어주고 SerialNumArray들 마스크재고배열에서 삭제.
+        	- 이벤트 : ~~마스크 구조체에 계약할 판매사 ID를 예상 판매사에 넣어주고 SerialNumArray들 마스크재고배열에서 삭제.~~ __배열로 해야하는데 배열로 하면 크기가 너무 커질수 있을거같아서 해결책 필요
 
     
 3. 판매사(seller)
