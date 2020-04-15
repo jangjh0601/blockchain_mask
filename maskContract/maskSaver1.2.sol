@@ -178,9 +178,11 @@ contract MaskSaver {
     
     // event that communicate with things.
     event MaskProduction(string _maskFactoryName, uint256 _MaskQuantity, string _statusMessage);
-    event manufacturerToDealer(string _manufacturerName, string _DealerName, string _statusMessage);
     event MaskQuantityCheck(string _maskFactoryName, uint256 _MaskQuantity, string _statusMessage);
-    event contractSign(string _manufacturerName, string _DealerName, string _statusMessage);
+    
+    event manufacturerToDealer(string _manufacturerName, string _dealerName, string _statusMessage);
+    event dealerToDealer(string _fromDealerName, string _toDealerName, string _statusMessage);
+    event dealerToSeller(string _dealerName, string _sellerName, string _statusMessage);
     
     constructor(string memory _manufacturerName) public {
         
@@ -237,11 +239,15 @@ contract MaskSaver {
         emit MaskProduction(manufacturers[msg.sender].manufacturerName, manufacturers[msg.sender].maskAmountOutput, "Finished making masks!");
     }
     
-    function maskContractSign(address _expDealer, uint256 _contractAmount) external onlyOwner {
+    function manufacturerToDealer(address _expDealer, uint256 _contractAmount) external onlyOwner {
         manufacturers[msg.sender].maskAmountHave = manufacturers[msg.sender].maskAmountHave.sub(_contractAmount);
         dealers[_expDealer].maskAmountHave = dealers[_expDealer].maskAmountHave.add(_contractAmount);
         
-        emit contractSign(manufacturers[msg.sender].manufacturerName, dealers[_expDealer].dealerID, "Contract Sign complete!")
+        emit manufacturerToDealer(manufacturers[msg.sender].manufacturerName, dealers[_expDealer].dealerID, "Contract Sign complete!")
+    }
+    
+    function dealerToSeller(address _expSeller, uint256 _contractAmount) external onlyOwner {
+        // 
     }
     
     function getOwner() external view returns (address) {
