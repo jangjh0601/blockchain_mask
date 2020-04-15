@@ -66,17 +66,17 @@
 
 2. 유통사(dealer)
 	1. 구조체
-		- dealerId(ex.10A) 첫째자리 1로 시작
+		- dealerId(ex.10A) 첫째자리 1로 시작 - __string dealerId__
 		- 일일 마스크 수입량(이것도 고민중)
 		- 소유중인 마스크 serialNum 배열
 
 	2. 유통사 정보 리턴
 		- 파라미터 : dealerId,
 		- 변수 :  
-        	- 컨트랙함수 : getdealerInfo(string dealerId)
-        	- 이벤트 : 
+        	- 컨트랙함수 : ~~getdealerInfo(string dealerId)~~ => __getDealerName()__
+        	- 이벤트 : __contractSign(string _manufacturerName, string _DealerName, string _statusMessage)__
 		- 기타 : 
-	3. 제조사로부터 납품받은 마스크 처리
+	3. ~~제조사로부터 납품받은 마스크 처리~~ __자동으로 구조체 개수에 추가시킴__
 		- 파라미터 : SerialNumArray
         	- 변수 : 
         	- 컨트랙함수 : addMaskBox(string[] SerialNumArray)
