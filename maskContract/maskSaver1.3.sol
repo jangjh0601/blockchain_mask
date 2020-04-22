@@ -635,34 +635,37 @@ contract maskSaver is ERC721{
     constructor () public {
         owner = msg.sender; // 새 마스크를 생산할 수 있는 maskSaver 컨트랙트의 소유자
     }
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
 
-    function maskMaking(string memory name, address account) public {
-        require(owner == msg.sender); // 소유자만이 마스크를 생성할 수 있습니다
-        uint256 maskId = Masks.length; // 유일한 마스크  ID
-        Masks.push(Mask(name, account, now));
+    function _maskMaking(string memory _name, address _account) private onlyOwner {
+        uint256 maskId = Masks.push(Mask(name, account, now)) - 1; // 유일한 마스크  ID
         _mint(account, maskId); // 새 마스크를 생산
     }
     
-    function startMaskDeal(address from, address to, uint256 maskId, uint256 price) public {
+    function maskMaking(string memory _name, address _account) public {
+        _maskMaking(_name, _account)
+    }
+    
+    function _startMaskDeal(address from, address to, uint256 maskId, uint256 price) private {
         dealInfos[maskId].expDealer.push(to);
         dealInfos[maskId].price = price;
         safeTransferFrom(from, to, maskId);
     }
     
-    function stopMaskDeal(address account, uint256 maskId) public {
-        uint256 length = dealInfos[maskId].expDealer.length;
+    function _stopMaskDeal(address account, uint256 maskId) private {
         require(account == dealInfos[maskId].expDealer[length-1]);
+        
+        uint256 length = dealInfos[maskId].expDealer.length;
         dealInfos[maskId].realDealer.push(account);
         emit matching(account, dealInfos[maskId].realDealer[length-1]);
     }
     
     function checkDate(uint256 maskId) public view returns (bool) {
-        if (Masks[maskId].date + 5 days > block.timestamp){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return (Masks[maskId].date + 5 days > block.timestamp);
     }
     
     /*
@@ -673,10 +676,10 @@ contract maskSaver is ERC721{
     to your source file then more types are available,
     but mapping types are still limited to inside
     a single contract and you cannot transfer them.
+    요고 필요 없을듯?
     */
     function getDealinfo(uint256 maskId) public view returns(address, address){
     //    return (dealInfos[maskId].expDealer[], dealInfos[maskId].realDealer[]);
     }
-    
 }
 
