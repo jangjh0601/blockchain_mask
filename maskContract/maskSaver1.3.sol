@@ -1297,96 +1297,15 @@ contract maskSaver is ERC721XToken {
         address manufacturerAddr;
         uint256 date;
     }
-
-    struct dealInfo {
-        address[] expDealer;
-        address[] realDealer;
-        uint256 price;
-    }
-
-    struct sellInfo {
-        address expSeller;
-        address realSeller;
-        uint256 price;
-    }
     
     Mask[] public Masks; // 첫 아이템의 인덱스는 0입니다
     
-    mapping(uint256 => dealInfo) dealInfos;
-    
-    sellInfo[] public sellerInfos;
-    
     address public owner;
     
-    event matching(address expDealer, address realDealer);
-    
-
-    
-    constructor () public {
-        owner = msg.sender; // 새 마스크를 생산할 수 있는 maskSaver 컨트랙트의 소유자
+    constructor(string memory _baseTokenURI) public ERC721XToken(_baseTokenURI) {
+            owner = msg.sender;
+        
     }
-
-
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
-    }
-
-    function _maskMaking(string memory _name, address _account, uint256 _supply) private onlyOwner {
-        uint256 maskId = Masks.push(Mask(_name, _account, now)) - 1; // 유일한 마스크  ID
-        _mint(maskId, _account, _supply); // 새 마스크를 생산
-    }
-    
-    function _startMaskDeal(address from, address to, uint256 maskId, uint256 price) private {
-        dealInfos[maskId].expDealer.push(to);
-        dealInfos[maskId].price = price;
-        safeTransferFrom(from, to, maskId);
-    }
-    
-    function _stopMaskDeal(address account, uint256 maskId) private {
-        uint256 length = dealInfos[maskId].expDealer.length;
-        require(account == dealInfos[maskId].expDealer[length-1]);
-
-        dealInfos[maskId].realDealer.push(account);
-        emit matching(account, dealInfos[maskId].realDealer[length-1]);
-    }
-    
-    function checkDate(uint256 maskId) public view returns (bool) {
-        return (Masks[maskId].date + 5 days > block.timestamp);
-    }
-}
-
-contract Card is ERC721XToken {
-
-    struct Mask {
-        string  manufacturerName;
-        address manufacturerAddr;
-        uint256 date;
-    }
-
-    struct dealInfo {
-        address[] expDealer;
-        address[] realDealer;
-        uint256 price;
-    }
-
-    struct sellInfo {
-        address expSeller;
-        address realSeller;
-        uint256 price;
-    }
-    
-    Mask[] public Masks; // 첫 아이템의 인덱스는 0입니다
-    
-    mapping(uint256 => dealInfo) dealInfos;
-    
-    sellInfo[] public sellerInfos;
-    
-    address public owner;
-    
-    event matching(address expDealer, address realDealer);
-    
-    constructor(string memory _baseTokenURI) public ERC721XToken(_baseTokenURI) {}
 
     function name() external view returns (string memory) {
         return "Mask";
@@ -1411,11 +1330,20 @@ contract Card is ERC721XToken {
         _mint(maskId, _account, _supply); // 새 마스크를 생산
     }
     
-    
     // deal function
-    
+    function dealMasks(address _from, address _to, uint256 _tokenId, uint256 _amount) public {
+        //require(ownerOf(_tokenId) == _from);
+        require(balanceOf(_from, _tokenId) >= _amount);
+        safeTransferFrom(_from, _to, _tokenId, _amount);
+    }
     
     function checkDate(uint256 maskId) public view returns (bool) {
         return (Masks[maskId].date + 5 days > block.timestamp);
     }
+    
+    // 1 = NFT, 2 = FT
+    function checkNFT(uint256 _tokenId) public view returns (uint256){
+        return tokenType[_tokenId];
+    }
 }
+
