@@ -2,7 +2,6 @@
 <html lang="en" dir="ltr">
   <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="./MyFunctions.js"></script>
     <!-- 합쳐지고 최소화된 최신 CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
@@ -11,7 +10,7 @@
 
 
     <meta charset="utf-8">
-    <title>Seller Page</title>
+    <title>Dsitributor Page</title>
   </head>
   <body>
     <div class="container" style="padding-top:20px">
@@ -24,212 +23,184 @@
     </form>
     </div>
 
-  <!-- 판매사 란 -->
+<!-- 재고내역 시작 -->
       <div class="container">
         <div class="panel panel-default">
         <h1 class="text-center">재고내역</h1>
             <hr>
 <div class=".col-md-6 .col-md-offset-3">
 <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-    <table class="table table-hover" >
+    <table class="table table-hover" id="inventoryTable">
 			<thead>
 				<tr>
+          <th>시간</th>
 					<th>일련번호</th>
-          <th>유통사</th>
-            <th>개수</th>
+          <th>제조사</th>
+          <th>개수</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody  >
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
+          <td>시간</td>
 					<td>123456789</td>
-          <td>유통사1</td>
+          <td>제조사1</td>
           <td>20</td>
 				</tr>
-        <tr>
-					<td>123456789</td>
-          <td>유통사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-					<td>123456789</td>
-          <td>유통사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-					<td>123456789</td>
-          <td>유통사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-					<td>123456789</td>
-          <td>유통사1</td>
-          <td>20</td>
-				</tr>
+
 			</tbody>
 		</table>
 	</div>
 </div>
-  </div>
-</div>
-
-  <!-- 유통사 확인란 -->
-  <br><br>
+    <hr>
+<!-- 재고내역 끝 -->
   <div class="container">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="serialNumber2">일련번호</label>
+      <input type="text" class="form-control" id="serialNumber2" placeholder="일련번호">
+        <label for="toDistributor">판매사</label>
+      </div>
+      <input type="text" class="form-control" id="toSeller" placeholder="판매사1">
+      <div class="form-group">
+        <label for="count">개수</label>
+        <input type="number" class="form-control" id="count1" placeholder="Box 단위(1Box = 500개)">
+      </div>
+      <button type="submit" class="btn btn-default" id="sendMask">보내기</button>
+    </form>
+  </div>
+  <br><br>
+</div>
+  </div>
+  <br><br><br>
+<!-- 거래내역 시작 -->
+  <div class ="container">
     <div class="panel panel-default">
     <h1 class="text-center">거래내역</h1>
-    <hr>
-<div class=".col-md-6 .col-md-offset-3">
+        <hr>
+  <div class=".col-md-6 .col-md-offset-3">
   <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-      <table class="table table-hover" >
+      <table class="table table-hover" id="transactionListTable">
   			<thead>
   				<tr>
+            <th>시간</th>
   					<th>일련번호</th>
+            <th>제조사</th>
             <th>유통사</th>
             <th>개수</th>
+            <th>입고/판매</th>
   				</tr>
   			</thead>
   			<tbody  >
           <tr>
+            <td>시간</td>
   					<td>123456789</td>
+            <td>제조사1</td>
             <td>유통사2</td>
             <td>20</td>
+            <td>판매</td>
   				</tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
+            <td>제조사1</td>
             <td>유통사2</td>
             <td>20</td>
+            <td>판매</td>
           </tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
+            <td>제조사1</td>
             <td>유통사2</td>
             <td>20</td>
+            <td>판매</td>
           </tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
-            <td>유통사2</td>
+            <td>제조사1</td>
+            <td>None</td>
             <td>20</td>
+            <td>입고</td>
           </tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
-            <td>유통사2</td>
+            <td>제조사1</td>
+            <td>None</td>
             <td>20</td>
+            <td>입고</td>
           </tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
-            <td>유통사2</td>
+            <td>제조사1</td>
+            <td>None</td>
             <td>20</td>
+            <td>입고</td>
           </tr>
           <tr>
+            <td>시간</td>
             <td>123456789</td>
-            <td>유통사2</td>
+            <td>제조사1</td>
+            <td>None</td>
             <td>20</td>
+            <td>입고</td>
           </tr>
-          <tr>
-            <td>123456789</td>
-            <td>유통사2</td>
-            <td>20</td>
-          </tr>
-          <tr>
-            <td>123456789</td>
-            <td>유통사2</td>
-            <td>20</td>
-          </tr>
+
   			</tbody>
   		</table>
   	</div>
+    <hr>
     <!-- 사용하지않게됨 -->
-    <!-- <div class="container" style="margin-bottom:25px">
+    <!-- <div class="container" style="margin-bottom:50px">
       <form class="form-inline">
         <div class="form-group">
           <label for="serialNumber2">일련번호</label>
         </div>
         <input type="text" class="form-control" id="serialNumber2" placeholder="일련번호">
-        <button type="submit" class="btn btn-default" id="checkContributor">확인</button>
+        <button type="submit" class="btn btn-default" id="checkManufacturer">확인</button>
       </form>
     </div> -->
-</div>
-</div>
-</div>
-    <!-- 거래내역 확인 및 소비자 정보 추가 -->
-    <br><br>
-    <div class="container">
-      <div class="panel panel-default">
-      <h1 class="text-center">판매내역</h1>
-    <div class=".col-md-6 .col-md-offset-3">
-    <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-        <table class="table table-hover" >
-          <thead>
-            <tr>
-              <th>일련번호</th>
-              <th>이름</th>
-              <th>주민번호</th>
-              <th>개수</th>
-            </tr>
-          </thead>
-          <tbody  >
-            <tr>
-              <td>123456789</td>
-              <td>강호동</td>
-              <td><script>
-              document.write(civilNumberEncode("991111-1123456"))</script></td>
-              <td>12</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-      <div class="container" style="margin-bottom:50px">
-        <form class="form-inline">
-          <div class="form-group">
-            <label for="serialNumber3">일련번호</label>
-          </div>
-          <input type="text" class="form-control" id="serialNumber3" placeholder="일련번호">
-          <div class="form-group">
-            <label for="count3">개수</label>
-          </div>
-          <input type="text" class="form-control" id="count3" placeholder="개수">
-          <div class="form-group">
-            <label for="name">이름</label>
-          </div>
-          <input type="text" class="form-control" id="name" placeholder="이름">
-          <div class="form-group">
-            <label for="civilNumber">주민번호</label>
-          </div>
-          <input type="text" class="form-control" id="civilNumber" placeholder="주민번호">
-          <button type="submit" class="btn btn-default" id="checkSales">확인</button>
-        </form>
-      </div>
   </div>
+</div>
+<!-- 거래내역 끝 -->
     <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <!-- The core Firebase JS SDK is always required and must be listed first -->
@@ -241,7 +212,6 @@
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
   <script src="./firebaseInit.js"></script>
-
   <script>
   userSessionCheck();
   </script>

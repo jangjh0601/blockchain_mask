@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+        <script src="./MyFunctions.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+
+    <meta charset="utf-8">
+    <title>Buyer Page</title>
+  </head>
+  <body>
+<!-- 사용자 바디 시작 -->
+      <div class="container" style="padding-top:20px">
+        <div class="panel panel-default">
+        <h1 class="text-center">마스크 구매 개수</h1>
+            <hr>
+<div class=".col-md-6 .col-md-offset-3">
+  <div class="container" style="margin-bottom:50px">
+    <form class="form-inline">
+      <div class="form-group">
+        <label for="name">이름</label>
+      </div>
+      <input type="text" class="form-control" id="name" placeholder="이름">
+      <div class="form-group">
+        <label for="civilNumber">주민번호</label>
+      </div>
+      <input type="text" class="form-control" id="civilNumber" placeholder="주민번호">
+      <button type="submit" class="btn btn-default" id="checkBuyerInfo">확인</button>
+      <br><br>
+      <p class="text-info" id="result"> 결과 </p>
+    </form>
+  </div>
+	</div>
+</div>
+</div>
+    <hr>
+    <div class="container">
+      <div class="panel panel-default">
+      <h1 class="text-center">경로 조회</h1>
+          <hr>
+<div class=".col-md-6 .col-md-offset-3">
+  <div class="container" style="margin-bottom:50px">
+  <form class="form-inline">
+    <div class="form-group">
+      <label for="serialNum">일련번호</label>
+    </div>
+    <input type="text" class="form-control" id="serialNum" placeholder="일련번호">
+    <button type="submit" class="btn btn-default" id="checkRoute">확인</button>
+  </form>
+
+</div>
+</div>
+</div>
+</div>
+<!-- 사용자 바디 끝 -->
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+  <script src="./firebaseInit.js"></script>
+
+  </body>
+</html>
