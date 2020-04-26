@@ -23,7 +23,8 @@
 
     </form>
     </div>
-
+<h1 class="text-center">판매사 페이지</h1>
+<hr><br>
   <!-- 판매사 란 -->
       <div class="container">
         <div class="panel panel-default">
@@ -31,7 +32,7 @@
             <hr>
 <div class=".col-md-6 .col-md-offset-3">
 <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-    <table class="table table-hover" >
+    <table class="table table-hover" id="inventoryTable">
 			<thead>
 				<tr>
           <th>시간</th>
@@ -113,7 +114,7 @@
     <hr>
 <div class=".col-md-6 .col-md-offset-3">
   <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-      <table class="table table-hover" >
+      <table class="table table-hover" id="transactionListTable">
   			<thead>
   				<tr>
             <th>시간</th>
@@ -196,7 +197,7 @@
       <h1 class="text-center">판매내역</h1>
     <div class=".col-md-6 .col-md-offset-3">
     <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-        <table class="table table-hover" >
+        <table class="table table-hover" id="buyerListTable">
           <thead>
             <tr>
               <th>일련번호</th>
@@ -239,20 +240,46 @@
         </form>
       </div>
   </div>
-    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-         https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
-  <script src="./firebaseInit.js"></script>
-
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+       https://firebase.google.com/docs/web/setup#available-libraries -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<script src="./firebaseInit.js"></script>
+<script src="./firebaseUserCheck.js" charset="utf-8"></script>
   <script>
   userSessionCheck();
+  </script>
+  <script type="text/javascript">
+      //재고 목록 테이블 만드는 함수
+      function MakeInventoryTable(){
+
+      }
+      //거래내역 테이블 만드는 함수
+      function MakeTransactionListTable(){
+
+      }
+      //구매자 리스트 테이블 만드는 함수
+      function MakeBuyerListTable(serialNumber, count, name, civilNumber){
+        //DB에 시리얼넘버, 이름, 개수, 주민번호 넣기
+
+      }
+      function SellMask(){
+        var serialNumber = document.getElementById("serialNumber3");
+        var name = document.getElementById("name");
+        var count = document.getElementById("count3");
+        var civilNumber = document.getElementById("civilNumber");
+
+        //위 변수를 가지고 컨트랙트 트랜잭션 발생
+        //결과가 ok라면 alert('ok') MakeBuyerListTable(serialNumber,  count,name,civilNumber) else alert('false') return
+
+      }
   </script>
 
   </body>

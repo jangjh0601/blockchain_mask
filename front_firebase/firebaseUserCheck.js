@@ -1,3 +1,5 @@
+var db = firebase.firestore();
+
 
   var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
 var firebaseDatabase; //파이어베이스 db 모듈 전역변수
@@ -15,6 +17,21 @@ firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 
       firebaseEmailAuth.onAuthStateChanged(function (user) {
 
         if (user) {
+          //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+          var docRef = db.collection("users").doc(firebaseEmailAuth.currentUser.uid);
+
+        docRef.get().then(function(doc) {
+            if (doc.exists) {
+              alert(doc.data().addr+" 입니다.");
+
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+        });
+
 
 
             //자바스크립트 dom 선택자를 통해서 네비게이션 메뉴의 엘리먼트 변경해주기
