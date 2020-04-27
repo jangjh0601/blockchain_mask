@@ -22,7 +22,10 @@ firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 
 
         docRef.get().then(function(doc) {
             if (doc.exists) {
-              alert(doc.data().addr+" 입니다.");
+              let addr = doc.data().addr;
+              let name = doc.data().name;
+                document.getElementById("id").textContent = user.email+" 님이 로그인했습니다."+ " 계좌 : "+addr+ " 이름 :"+name;
+              //alert(doc.data().addr+" 입니다.");
 
             } else {
                 // doc.data() will be undefined in this case
@@ -35,7 +38,7 @@ firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 
 
 
             //자바스크립트 dom 선택자를 통해서 네비게이션 메뉴의 엘리먼트 변경해주기
-          document.getElementById("id").textContent = user.email+" 님이 로그인했습니다.";
+
 
             //alert(userInfo.userid);  //uid는 db에서 user 테이블의 각 개체들의 pk 인데, 이 값은 인증에서 생성된 아이디의 pk 값과 같다. *중요!
 

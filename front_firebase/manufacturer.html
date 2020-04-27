@@ -3,20 +3,10 @@
   <head>
     <head>
     <meta charset=”UTF-8”>
-    <title>web3 test</title>
-  <script src="./web3.min.js"></script>
+    <title>Manufacturer Page</title>
+<script src="./web3.min.js"></script>
+<script src="./web3Init.js"></script>
 
-  <script type="text/javascript">
-        window.addEventListener('load', function () {
-            if (typeof web3 !== 'undefined') {
-                console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
-                window.web3 = new Web3(web3.currentProvider);
-            } else {
-                console.log('No Web3 Detected... using HTTP Provider')
-                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/6d989b9558914d02a9513a3433b8cd84"));
-            }
-        })
-    </script>
 </head>
           <script src="./MyFunctions.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
