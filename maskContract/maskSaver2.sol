@@ -1330,7 +1330,7 @@ contract maskSaver is ERC721XToken {
     }
     
     /**
-     * @dev mask making start with tokenId for order
+     * @dev mask making start with tokenId for order // FT
      * @param _name string to write mask manufacturerName
      * @param _account The address to batchTransfer objects to.
      * @param _supply Amount that wants to mint
@@ -1338,7 +1338,18 @@ contract maskSaver is ERC721XToken {
     function _maskMaking(string memory _name, address _account, uint256 _supply) public {
         //require(msg.sender == owner);
         uint256 maskId = Masks.push(Mask(_name, _account, now)) - 1; // 유일한 마스크  ID
-        _mint(maskId, _account, _supply); // 새 마스크를 생산
+        _mint(maskId, _account, _supply); // FT 새 마스크를 생산
+    }
+    
+    /**
+     * @dev mask making start with tokenId for order // NFT
+     * @param _name string to write mask manufacturerName
+     * @param _account The address to batchTransfer objects to.
+     */
+    function _maskMaking(string memory _name, address _account) public {
+        //require(msg.sender == owner);
+        uint256 maskId = Masks.push(Mask(_name, _account, now)) - 1; // 유일한 마스크  ID
+        _mint(maskId, _account); // NFT 새 마스크를 생산
     }
     
     // deal function
