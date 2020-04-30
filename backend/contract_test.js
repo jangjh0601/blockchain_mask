@@ -1103,12 +1103,18 @@ let contractAddress = "0x666a89a43867734855736ba5437D9544a15bE6Ac";
 const contract = new web3.eth.Contract(contractAbi, contractAddress);
 const pk = Buffer.from('10BB7A4BB5BAD255DFB9265A4E49AC3CB85F47D3CE8415652278FABAE6AA1552', 'hex');
 
-async function getMaskInfo(maskNum){
+exports.getMaskInfo = async function(req, res){
+	//마스크 정보 가져오기, maskNum은 마스크 인덱스 0,1,2 테스트 해보시면아실거에요
+	//현재는 마스크인덱스로가져오기 가능, 그냥 마스크 배열 참조하는것.
+	let maskNum = req.params.maskNum;
 	const result = await contract.methods.Masks(maskNum).call();
-	console.log(result);
+	res.send(result);
 };
 
-async function MaskMaking(Id, supply){
+exports.maskMaking = async function(req, res){
+	//마스크 생산, 일단 마스크 ID랑 보급개수설정가능, 생산지 지갑주소는 추후 설정해야함
+	let Id = req.params.Id;
+	let supply = req.params.Supply
 	web3.eth.getTransactionCount(fromAddress, (err, txCount) =>{
 
 		const txObject = {
@@ -1129,13 +1135,13 @@ async function MaskMaking(Id, supply){
 		web3.eth.sendSignedTransaction(raw)
 			.once('transactionHash', (hash) => {
 				console.log('transactionHash https://roptsten.etherscan.io/tx/' + hash);
+				res.send(hash); //트랜잭션 해쉬값 반환
 			})
 			.once('receipt', (receipt) =>{
 				console.log('receipt' + receipt.getLogs().get(0).getTopics().get(0));
 			}).on('error', console.error);
 	});
 }
-getMaskInfo(0);
 /*
 web3.eth.getTransactionCount(fromAddress, (err, txCount) =>{
 
