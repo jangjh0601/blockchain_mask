@@ -5,3 +5,14 @@ function civilNumberEncode(num){
   var tmp = num;
   return tmp.substr(0, 8) + "xxxxxx";
 }
+
+//주민번호 유효성 검사
+function ValidateCivilNumber(civilNumber){
+  if(civilNumber.charAt(6) != "-"){
+    return false;
+  }
+  else if(civilNumber.length != 14){
+    return false;
+  }
+  return true;
+}

@@ -1,78 +1,235 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr" style="height: 100%;">
-  <head>
-        <script src="./MyFunctions.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- 합쳐지고 최소화된 최신 CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-<!-- 부가적인 테마 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+<head>
+  <script src="./MyFunctions.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- 합쳐지고 최소화된 최신 CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 
-<style>body {
-  height: 100%;
-color: #111;
-box-shadow: inset 0 0 2rem rgba(0, 0, 0, .5);
-}</style>
-    <meta charset="utf-8">
-    <title>Buyer Page</title>
-  </head>
-  <body style="padding-top: 10em;">
-<!-- 사용자 바디 시작 -->
-      <div class="container" style="padding-top:20px">
-        <div class="panel panel-default">
-        <h1 class="text-center">마스크 구매 개수</h1>
-            <hr>
-<div class=".col-md-6 .col-md-offset-3">
-  <div class="container" style="margin-bottom:50px">
-    <form class="form-inline">
-      <div class="form-group">
-        <label for="name">이름</label>
+  <!-- 부가적인 테마 -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+  <style>
+    body {
+      height: 100%;
+      color: #111;
+      box-shadow: inset 0 0 2rem rgba(0, 0, 0, .5);
+    }
+  </style>
+  <meta charset="utf-8">
+  <title>Buyer Page</title>
+</head>
+
+<body style="padding-top: 10em;">
+  <!-- 사용자 바디 시작 -->
+  <div class="container" style="padding-top:20px">
+    <div class="panel panel-default">
+      <h1 class="text-center">마스크 구매 개수</h1>
+      <hr>
+      <div class=".col-md-6 .col-md-offset-3" style="text-align: center;">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th style="text-align: center;" scope="col">구분</th>
+            <th scope="col"style="text-align: center;">월</th>
+            <th scope="col"style="text-align: center;">화</th>
+            <th scope="col"style="text-align: center;">수</th>
+            <th scope="col"style="text-align: center;">목</th>
+            <th scope="col"style="text-align: center;">금</th>
+            <th scope="col"style="text-align: center;">토, 일</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th style="text-align: center;">출생년도 끝자리</th>
+            <td>1, 6</td>
+            <td>2, 7</td>
+            <td>3, 8</td>
+            <td>4, 9</td>
+            <td>5, 0</td>
+            <td>주중에 구매하지 않은 모든 사람</td>
+          </tr>
+         
+        </tbody>
+      </table>
       </div>
-      <input type="text" class="form-control" id="name" placeholder="이름">
-      <div class="form-group">
-        <label for="civilNumber">주민번호</label>
+      <div class=".col-md-6 .col-md-offset-3">
+        <div class="container" style="margin-bottom:50px">
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="name">이름</label>
+            </div>
+            <input type="text" class="form-control" id="name" placeholder="이름">
+            <div class="form-group">
+              <label for="civilNumber">주민번호</label>
+            </div>
+            <input type="text" class="form-control" id="civilNumber" placeholder="주민번호">
+            <button type="button" class="btn btn-default" id="checkBuyerInfo" onclick="ShowCanPurchase()">확인</button>
+            <br><br>
+            <p class="text-info" id="result"> 결과 </p>
+          </form>
+        </div>
       </div>
-      <input type="text" class="form-control" id="civilNumber" placeholder="주민번호">
-      <button type="submit" class="btn btn-default" id="checkBuyerInfo">확인</button>
-      <br><br>
-      <p class="text-info" id="result"> 결과 </p>
-    </form>
-  </div>
-	</div>
-</div>
-</div>
-    <hr>
-    <div class="container">
-      <div class="panel panel-default">
-      <h1 class="text-center">경로 조회</h1>
-          <hr>
-<div class=".col-md-6 .col-md-offset-3">
-  <div class="container" style="margin-bottom:50px">
-  <form class="form-inline">
-    <div class="form-group">
-      <label for="serialNum">일련번호</label>
     </div>
-    <input type="text" class="form-control" id="serialNum" placeholder="일련번호">
-    <button type="submit" class="btn btn-default" id="checkRoute">확인</button>
-  </form>
+  </div>
+  <hr>
+  <div class="container">
+    <div class="panel panel-default">
+      <h1 class="text-center">경로 조회</h1>
+      <hr>
+      <div class=".col-md-6 .col-md-offset-3">
+        <div class="container" style="margin-bottom:50px">
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="serialNum">일련번호</label>
+            </div>
+            <input type="text" class="form-control" id="serialNum" placeholder="일련번호">
+            <button type="submit" class="btn btn-default" id="checkRoute" onclick="FindRoute()">확인</button>
+          </form>
 
-</div>
-</div>
-</div>
-</div>
-<!-- 사용자 바디 끝 -->
-    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 사용자 바디 끝 -->
+  <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
+  <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
   <script src="./firebaseInit.js"></script>
+  <script>
+    var db = firebase.firestore();
+    var defaultDatabase = firebase.database();
+    
+    //DB로부터 데이터를 가지고옴
+    function GetDataFromDB() {
+      var docRef = db.collection("observer").doc("purchase_record").collection("record_set");
+      docRef.orderBy("time", "desc").get().then(function (querySnapshot) {
 
-  </body>
+        querySnapshot.forEach(function (doc) {
+          //console.log(doc.id, " => ", doc.data());
+          // doc.data() is never undefined for query doc snapshots
+          var time = doc.data().time.toDate().getTime();
+
+
+        });
+        $('#buyerListTableTBody').append(rowItem);
+      });
+
+
+    }
+
+    //Deprecated
+    // function DeleteOutdatedData() {
+    //   var time = new Date(Date.now());
+    //   firebase.database().ref('/.info/serverTimeOffset')
+    //     .once('value')
+    //     .then(function stv(data) {
+    //       console.log(time.setDate(time.getDate() - 7));
+    //       console.log(data.val() + Date.now() + "  " + time.toDateString());
+
+    //     }, function (err) {
+    //       return err;
+    //     });
+    //   var delete_query = db.collection("observer").doc("purchase_record").collection("record_set").where("time", "<",
+    //     firebase.firestore.Timestamp.fromDate(time));
+    //   delete_query.get().then(function (querySnapshot) {
+    //     querySnapshot.forEach(function (doc) {
+    //       doc.ref.delete();
+    //       console.log(time + " 이전 삭제완료");
+    //     });
+    //   });
+
+    // }
+    function ValidateCivilNumber(civilNumber){
+  if(civilNumber.charAt(6) != "-"){
+    return false;
+  }
+  else if(civilNumber.length != 14){
+    return false;
+  }
+  return true;
+}
+
+    
+    //사용자에게 구매 가능 여부를 보여주는 함수
+    function ShowCanPurchase() {
+      /* 0 일요일, 1 월요일, 2 화요일, 3 수요일, 4 목요일, 5 금요일, 6 토요일*/
+
+      var civilNumber = document.getElementById("civilNumber").value;
+      var name = document.getElementById("name").value;
+      if (!civilNumber || !name) {
+        alert("제대로 입력해주세요!");
+        return;
+      }else if(!ValidateCivilNumber(civilNumber)){
+        alert("주민번호가 유효하지 않습니다.");
+        return;
+      }
+    
+      //DeleteOutdatedData();
+      var civilNumberFront = new String(civilNumber).charAt(5);
+      console.log("c=", civilNumberFront);
+      DateEnum = {
+        "0": "금요일",
+        "1": "월요일",
+        "2": "화요일",
+        "3": "수요일",
+        "4": "목요일",
+        "5": "금요일",
+        "6": "월요일",
+        "7": "화요일",
+        "8": "수요일",
+        "9": "목요일",
+      }
+      
+
+      var dayOftheWeek = new Date(Date.now()).getDay();
+      // console.log(DateEnum[civilNumberFront]);
+      // console.log("DateEnum = " + DateEnum[civilNumberFront]);
+      // console.log(dayOftheWeek);
+
+
+      var canPurchase_query =  db.collection("observer").doc("purchase_record").collection("record_set").where("name", "==", name).where("civilNumber", "==", civilNumber);
+      
+      var result = "";
+      canPurchase_query
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            result +=doc.data().time.toDate().toLocaleString();
+        });
+        if(result){
+          document.getElementById("result").textContent = result + "에 이미 구매하셨습니다. 다음주 "+DateEnum[civilNumberFront]+" 또는 주말에 구매해주세요!";
+        }
+        else{
+          document.getElementById("result").textContent = "이번주 "+DateEnum[civilNumberFront]+" 또는 주말에 구매하실 수 있습니다!"
+        }
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+     }
+
+     //QR코드에서 확인버튼 누르면 실행되는 함수
+     function FindRoute(){
+       var serialNum = document.getElementById("serialNum").value;
+      var url = "QRcode.html";
+            var name = "QRCODE 페이지";
+            var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
+     }
+  </script>
+</body>
+
 </html>
