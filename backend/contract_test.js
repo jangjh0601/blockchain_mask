@@ -1107,8 +1107,12 @@ exports.getMaskInfo = async function(req, res){
 	//마스크 정보 가져오기, maskNum은 마스크 인덱스 0,1,2 테스트 해보시면아실거에요
 	//현재는 마스크인덱스로가져오기 가능, 그냥 마스크 배열 참조하는것.
 	let maskNum = req.params.maskNum;
-	const result = await contract.methods.Masks(maskNum).call();
-	res.send(result);
+	try{
+		const result = await contract.methods.Masks(maskNum).call();
+		res.send(result);
+	}catch(error){
+		res.send(error);
+	}
 };
 
 exports.maskMaking = async function(req, res){
