@@ -1307,6 +1307,11 @@ contract maskSaver is ERC721XToken {
     uint256[] public maskIDIntList;
     address public owner;
     
+    event NFT_MakeEvent(string _name, address _account, string _Message);
+    event FT_MakeEvent(string _name, address _account, uint256 _supply, string _Message);
+    event DealEvent(address _from, address _to, uint256 _tokenId, uint256 _amount, string _Message);
+    event SellEvent(address _from, uint256 _tokenId, uint256 _amount, string _Message);
+    
     constructor(string memory _baseTokenURI) public ERC721XToken(_baseTokenURI) {
             owner = msg.sender;
     }
@@ -1339,6 +1344,7 @@ contract maskSaver is ERC721XToken {
         //require(msg.sender == owner);
         uint256 maskId = Masks.push(Mask(_name, _account, now)) - 1; // 유일한 마스크  ID
         _mint(maskId, _account, _supply); // FT 새 마스크를 생산
+        emit FT_MakeEvent(_name, _account, _supply, "Making masks...");
     }
     
     /**
@@ -1350,6 +1356,7 @@ contract maskSaver is ERC721XToken {
         //require(msg.sender == owner);
         uint256 maskId = Masks.push(Mask(_name, _account, now)) - 1; // 유일한 마스크  ID
         _mint(maskId, _account); // NFT 새 마스크를 생산
+        emit NFT_MakeEvent(_name, _account, "Masking the mask...");
     }
     
     // deal function
@@ -1357,6 +1364,7 @@ contract maskSaver is ERC721XToken {
         //require(ownerOf(_tokenId) == _from);
         require(balanceOf(_from, _tokenId) >= _amount);
         safeTransferFrom(_from, _to, _tokenId, _amount);
+        emit DealEvent(_from, _to, _tokenId, _amount, "dealing masks...");
     }
     
     /**
@@ -1366,10 +1374,11 @@ contract maskSaver is ERC721XToken {
      * @param _amount How many mask token is sold.
      * Note:  Arrays should be sorted so that all tokenIds in a same bin are adjacent (more efficient).
      */
-    function sellMasks(address _from, uint256 _tokenId, uint256 _amount) public view {
+    function sellMasks(address _from, uint256 _tokenId, uint256 _amount) public {
         //require(ownerOf(_tokenId) == _from);
         require(balanceOf(_from, _tokenId) >= _amount);
         //safeTransferFrom(_from, 모아지는 지갑 주소, _tokenId, _amount);
+        emit SellEvent(_from, _tokenId, _amount, "Selling masks...");
     }
     
     //논란의 여지가 있음. 소각은 나중에 생각하기로
