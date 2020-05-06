@@ -50,3 +50,8 @@ event Illegal(address _from, uint256 _tokenId);
  
  function maskListReturn(uint256 _number) public view returns (uint256)
  => 어떤 마스크 토큰 넘버 존재하는지 _number 입력하면 return maskIDIntList[_number]; 해주는거.
+ 
+ 
+ https://ropsten.etherscan.io/address/0xbb15b5c03c59a72cc8b586a0d9edcca5e36b9397
+ 
+ 이 주소에 테스트 과정이 좀 담겨있음  // 이벤트 깔끔하게 보이는거 indexed 로 하면 될거같아서 시도중
