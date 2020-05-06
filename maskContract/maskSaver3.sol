@@ -1456,43 +1456,42 @@ contract maskSaver is ERC721 {
             owner = msg.sender;
     }
     
-    event Makemask(uint256 tokenId, string _name, address _account, string _Message);
+    event Makemask(uint256 indexed tokenId, string indexed _name, address indexed _account, string _Message);
     event DealEvent(address _from, address _to, uint256 _tokenId, uint256 _amount, string _Message);
     event SellEvent(address _from, uint256 _tokenId, string _Message);
     event Illegal(address _from, uint256 _tokenId);
     
     /**
      * @dev mask making start with tokenId for order
-     * @param _name string to write mask manufacturerName
-     * @param _account The address
+     * @param _manuname string to write mask manufacturerName
      */
-    function _maskMaking(string memory _name, address _account) public {
-        //require(msg.sender == owner);
-        Masks.push(Mask(_name, _account, now));
+    function _maskMaking(string memory _manuname) public {
+        
+        Masks.push(Mask(_manuname, msg.sender, now));
         uint256 tokenId = Masks.length - 1; // 유일한 마스크  ID
-        _mint(_account, tokenId); // FT 새 마스크를 생산
+        _mint(msg.sender, tokenId); // FT 새 마스크를 생산
         maskIDIntList.push(tokenId);
-        emit Makemask(tokenId, _name, _account, "Making masks...");
+        emit Makemask(tokenId, _manuname, msg.sender, "Making masks...");
     }
     
     // deal function
-    function dealMasks(address _from, address _to, uint256 _tokenId, uint256 _amount) public {
+    function dealMasks(address _to, uint256 _tokenId, uint256 _amount) public {
         require(checkDate(_tokenId));
-        require(ownerOf(_tokenId) == _from);
+        require(ownerOf(_tokenId) == msg.sender);
         
-        transferFrom(_from, _to, _tokenId);
+        transferFrom(msg.sender, _to, _tokenId);
         
         //for(uint256 i = 0; i<_amount/500; i++) {
         //    transferFrom(_from, _to, _tokenId);
         //    _tokenId++;
         //}
 
-        emit DealEvent(_from, _to, _tokenId, _amount, "Dealing masks...");
+        emit DealEvent(msg.sender, _to, _tokenId, _amount, "Dealing masks...");
     }
     
-    function sellMasks(address _from, uint256 _tokenId) public {
+    function sellMasks(address _from, address _collect, uint256 _tokenId) public {
         require(ownerOf(_tokenId) == _from);
-        transferFrom(_from, owner, _tokenId);
+        transferFrom(_from, _collect, _tokenId);
         //safeTransferFrom(_from, 모아지는 지갑 주소, _tokenId, _amount);
         emit SellEvent(_from, _tokenId, "Selling masks...");
     }
