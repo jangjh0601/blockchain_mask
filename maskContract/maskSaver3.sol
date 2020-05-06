@@ -1438,7 +1438,6 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
 /**
  * @title maskSaver main contract
  * @dev maskSaver contract that make transaction and mint
- *  from ERC721X contracts.
  */
 contract maskSaver is ERC721 {
 
@@ -1468,8 +1467,8 @@ contract maskSaver is ERC721 {
     function _maskMaking(string memory _manuname) public {
         
         Masks.push(Mask(_manuname, msg.sender, now));
-        uint256 tokenId = Masks.length - 1; // 유일한 마스크  ID
-        _mint(msg.sender, tokenId); // FT 새 마스크를 생산
+        uint256 tokenId = Masks.length - 1; 
+        _mint(msg.sender, tokenId);
         maskIDIntList.push(tokenId);
         emit Makemask(tokenId, _manuname, msg.sender, "Making masks...");
     }
@@ -1491,8 +1490,7 @@ contract maskSaver is ERC721 {
     
     function sellMasks(address _from, address _collect, uint256 _tokenId) public {
         require(ownerOf(_tokenId) == _from);
-        transferFrom(_from, _collect, _tokenId);
-        //safeTransferFrom(_from, 모아지는 지갑 주소, _tokenId, _amount);
+        safeTransferFrom(_from, _collect, _tokenId);
         emit SellEvent(_from, _tokenId, "Selling masks...");
     }
     
