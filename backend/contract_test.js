@@ -723,13 +723,21 @@ let contractAddress = "0x781964d811AB08E584f854572EbD2305C93a1C3f";
 const contract = new web3.eth.Contract(contractAbi, contractAddress);
 //const pk = Buffer.from('7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', 'hex');
 
-async function getMaskInfo(maskNum){
-	const result = await contract.methods.Masks(maskNum).call();
-	console.log(result);
+exports.getMaskInfo = async function(req, res){
+   let maskNum = req.params.maskNum;
+   try{
+      const result = await contract.methods.Masks(maskNum).call();
+      console.log(result);
+      res.send(result);
+   }catch(err){
+      res.send("error");
+   }
 };
 
-async function MaskMaking(account, privateKey){
-    const pk = Buffer.from(privateKey,'hex');
+exports.MaskMaking = async function(req, res){
+   let account = req.params.account;
+   let privateKey = req.params.privateKey;
+   const pk = Buffer.from(privateKey,'hex');
 
 	web3.eth.getTransactionCount(account, (err, txCount) =>{
 
@@ -750,8 +758,9 @@ async function MaskMaking(account, privateKey){
 	
 		web3.eth.sendSignedTransaction(raw)
 			.once('transactionHash', (hash) => {
-				console.log('transactionHash https://roptsten.etherscan.io/tx/' + hash);
-			//})
+				//console.log('transactionHash https://roptsten.etherscan.io/tx/' + hash);
+            res.send('transactionHash https://roptsten.etherscan.io/tx/' + hash);
+            //})
 			//.once('receipt', (receipt) =>{
 			//	console.log('receipt' + receipt.getLogs().get(0).getTopics().get(0));
 			}).on('error', console.error);
@@ -789,4 +798,4 @@ async function dealMasks(from, privateKey, to, tokenId) {
 }
 
 //MaskMaking('maker A', '0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67');
-dealMasks('0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', '0xb93428830a28aD774DB9A3937fC8962fb4429785', '2')
+//dealMasks('0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', '0xb93428830a28aD774DB9A3937fC8962fb4429785', '2')
