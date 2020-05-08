@@ -1447,18 +1447,23 @@ contract maskSaver is ERC721 {
         uint256 date;
     }
     
+    // Dealer[] dealers 배열에 추가될 구조체 배열
+    // tokenId 이동될때마다 추가하고 딜러 Address 저장되있다.
+    // ERC721 추적기능 있는데 필요할지 웹팀에서 결정좀
     struct Dealer {
         uint256[] tokenId;
         address dealerAddress;
     }
     
+    // Dealer랑 거의 마찬가지
     struct Seller {
         uint256[] tokenId;
         address sellerAddress;
     }
     
-    Mask[] public Masks; // 첫 아이템의 인덱스는 0입니다
-    uint256[] public maskIDIntList; // need or delete? ___ use totalSupply to check whole amount
+    Mask[] public Masks; // 첫 아이템의 인덱스는 0
+    uint256[] public maskIDIntList; // need or delete? ___ use totalSupply to check whole amount 
+    // ___ 필요할까? 토탈서플라이로 수량보고 각각 인덱스 번호 넣으면 tokenId 있는지 없는지 확인 가능
     address public owner;
     
     Dealer[] dealers;
@@ -1468,6 +1473,7 @@ contract maskSaver is ERC721 {
             owner = msg.sender;
     }
     
+    // 이벤트 필요하면 어떤게 필요한지 말해주셔
     event Makemask(uint256 indexed tokenId, string indexed _name, address indexed _account, string _Message);
     event DealEvent(address _from, address _to, uint256 _tokenId, uint256 _amount, string _Message);
     event SellEvent(address _from, uint256 _tokenId, string _Message);
@@ -1486,7 +1492,7 @@ contract maskSaver is ERC721 {
         emit Makemask(tokenId, _manuname, msg.sender, "Making masks...");
     }
     
-    // deal function - factory to dealer
+    // deal function - factory to dealer 제조사랑 유통사랑의 토큰 이동 펑션
     function dealMasksfromManu(address _to, uint256 _tokenId, uint256 _amount) public {
         require(checkDate(_tokenId));
         require(ownerOf(_tokenId) == msg.sender);
@@ -1501,17 +1507,21 @@ contract maskSaver is ERC721 {
         emit DealEvent(msg.sender, _to, _tokenId, _amount, "Dealing masks...");
     }
     
-    // deal function - dealer to dealer
+    // deal function - dealer to dealer 유통사랑 유통사, 유통사랑 판매사랑의 토큰 이동 펑션
     function dealMasksfromDealer(address _from, address _to, uint256 _tokenId, uint256 _amount) public {
         require(checkDate(_tokenId));
         require(ownerOf(_tokenId) == _from);
         
         transferFrom(_from, _to, _tokenId);
         
+        // 요고로 500개 단위로 끊어서 반복문으로 보내도 댐 
+        // 웹에서 처리하는게 나을지 연속되게 마스크 ID가 만들어질지 그것도 의문
+        // 소유권 없는 마스크 ID는 자동으로 reject 시켜서 괜찮기도 할듯? 고민하기
         //for(uint256 i = 0; i<_amount/500; i++) {
         //    transferFrom(_from, _to, _tokenId);
         //    _tokenId++;
         //}
+        
         Dealer memory d = Dealer(new uint256[](0), _from);
         dealers.push(d);
         dealers[dealers.length-1].tokenId.push(_tokenId);
@@ -1519,6 +1529,8 @@ contract maskSaver is ERC721 {
         emit DealEvent(_from, _to, _tokenId, _amount, "Dealing masks...");
     }
     
+    // 판매사에서 다 팔고 어떠한 _collect 주소로 보낼때 그 _collect 결정해놓을지
+    // 아니면 이렇게 함수로 받을지? 고민 필요
     function sellMasks(address _collect, uint256 _tokenId) public {
         require(ownerOf(_tokenId) == msg.sender);
         safeTransferFrom(msg.sender, _collect, _tokenId);
@@ -1530,7 +1542,7 @@ contract maskSaver is ERC721 {
         emit SellEvent(msg.sender, _tokenId, "Selling masks...");
     }
     
-    //논란의 여지가 있음. 소각은 나중에 생각하기로
+    // 소각하게 되면 _collect 계정에 있는 _tokenId 중에 90일 지난거 소각할지 여부
     function burnToken(uint256 _tokenId) public {
         // if 60days later after sold mask, burn token
         require(checkDate90(_tokenId));
@@ -1538,6 +1550,7 @@ contract maskSaver is ERC721 {
     }
     
     // check date thst based on law ---> true ->ok  / false ->not ok
+    // 법 근거한 테스트 한다음에 5일 지났으면 Illegal 
     function checkDate(uint256 _tokenId) public returns (bool) {
         bool check =  Masks[_tokenId].date + 5 days > block.timestamp;
         if(check) emit Illegal(msg.sender, _tokenId);
