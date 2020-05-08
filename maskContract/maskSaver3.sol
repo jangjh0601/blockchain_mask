@@ -1447,9 +1447,22 @@ contract maskSaver is ERC721 {
         uint256 date;
     }
     
+    struct Dealer {
+        uint256[] tokenId;
+        address dealerAddress;
+    }
+    
+    struct Seller {
+        uint256[] tokenId;
+        address sellerAddress;
+    }
+    
     Mask[] public Masks; // 첫 아이템의 인덱스는 0입니다
-    uint256[] public maskIDIntList;
+    uint256[] public maskIDIntList; // need or delete? ___ use totalSupply to check whole amount
     address public owner;
+    
+    Dealer[] dealers;
+    Seller[] sellers;
     
     constructor() public ERC721("Mask", "MSK") {
             owner = msg.sender;
@@ -1473,8 +1486,8 @@ contract maskSaver is ERC721 {
         emit Makemask(tokenId, _manuname, msg.sender, "Making masks...");
     }
     
-    // deal function
-    function dealMasks(address _to, uint256 _tokenId, uint256 _amount) public {
+    // deal function - factory to dealer
+    function dealMasksfromManu(address _to, uint256 _tokenId, uint256 _amount) public {
         require(checkDate(_tokenId));
         require(ownerOf(_tokenId) == msg.sender);
         
@@ -1484,36 +1497,56 @@ contract maskSaver is ERC721 {
         //    transferFrom(_from, _to, _tokenId);
         //    _tokenId++;
         //}
-
+        
         emit DealEvent(msg.sender, _to, _tokenId, _amount, "Dealing masks...");
     }
     
-    function sellMasks(address _from, address _collect, uint256 _tokenId) public {
+    // deal function - dealer to dealer
+    function dealMasksfromDealer(address _from, address _to, uint256 _tokenId, uint256 _amount) public {
+        require(checkDate(_tokenId));
         require(ownerOf(_tokenId) == _from);
-        safeTransferFrom(_from, _collect, _tokenId);
-        emit SellEvent(_from, _tokenId, "Selling masks...");
+        
+        transferFrom(_from, _to, _tokenId);
+        
+        //for(uint256 i = 0; i<_amount/500; i++) {
+        //    transferFrom(_from, _to, _tokenId);
+        //    _tokenId++;
+        //}
+        Dealer memory d = Dealer(new uint256[](0), _from);
+        dealers.push(d);
+        dealers[dealers.length-1].tokenId.push(_tokenId);
+        
+        emit DealEvent(_from, _to, _tokenId, _amount, "Dealing masks...");
+    }
+    
+    function sellMasks(address _collect, uint256 _tokenId) public {
+        require(ownerOf(_tokenId) == msg.sender);
+        safeTransferFrom(msg.sender, _collect, _tokenId);
+        
+        Seller memory s = Seller(new uint256[](0), msg.sender);
+        sellers.push(s);
+        sellers[sellers.length-1].tokenId.push(_tokenId);
+        
+        emit SellEvent(msg.sender, _tokenId, "Selling masks...");
     }
     
     //논란의 여지가 있음. 소각은 나중에 생각하기로
     function burnToken(uint256 _tokenId) public {
         // if 60days later after sold mask, burn token
-        require(checkDate60(_tokenId));
+        require(checkDate90(_tokenId));
         _burn(_tokenId);
     }
     
     // check date thst based on law ---> true ->ok  / false ->not ok
     function checkDate(uint256 _tokenId) public returns (bool) {
-        emit Illegal(msg.sender, _tokenId);
-        return (Masks[_tokenId].date + 5 days > block.timestamp);
+        bool check =  Masks[_tokenId].date + 5 days > block.timestamp;
+        if(check) emit Illegal(msg.sender, _tokenId);
+        return check;
     }
     
     // for burn token
-    function checkDate60(uint256 _tokenId) public view returns (bool) {
-        return (Masks[_tokenId].date + 60 days > block.timestamp);
+    function checkDate90(uint256 _tokenId) public view returns (bool) {
+        return (Masks[_tokenId].date + 90 days > block.timestamp);
     }
     
-    // check mask list whick token is inside
-    function maskListReturn(uint256 _number) public view returns (uint256) {
-        return maskIDIntList[_number];
-    }
 } 
