@@ -2,23 +2,14 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <script src="./web3.min.js"></script>
-  <!-- <script src="./web3Init.js"></script> -->
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./MyFunctions.js"></script>
-  <!-- 합쳐지고 최소화된 최신 CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-  <!-- 부가적인 테마 -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
-  <style>
-    body {
-      height: 100%;
-  color: #111;
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-}
-  </style>
   <meta charset="utf-8">
   <title>Seller Page</title>
 </head>
@@ -88,27 +79,7 @@
                 <td>유통사1</td>
                 <td>20</td>
               </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
+           
             </tbody>
           </table>
         </div>
@@ -163,27 +134,7 @@
                 <td>유통사1</td>
                 <td>20</td>
               </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
+      
             </tbody>
           </table>
         </div>
@@ -215,27 +166,36 @@
         <div class="container" style="margin-bottom:50px">
           <form class="form-inline">
             <div class="form-group">
-              <label for="serialNumber3">일련번호</label>
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">일련번호</span>
+              </div>
             </div>
             <input type="text" class="form-control" id="serialNumber3" placeholder="일련번호">
-            <div class="form-group">
-              <label for="count3">개수</label>
-            </div>
+
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">개수</span>
+              </div>
+
             <input type="text" class="form-control" id="count3" placeholder="개수">
-            <div class="form-group">
-              <label for="name">이름</label>
-            </div>
+
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">이름</span>
+              </div>
+
             <input type="text" class="form-control" id="name" placeholder="이름">
-            <div class="form-group">
-              <label for="civilNumber">주민번호</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">주민번호</span>
+              </div>
+              <input type="text" class="form-control" id="civilNumber" placeholder="주민번호" onkeyup="setCivilNumber(this)">
             </div>
-            <input type="text" class="form-control" id="civilNumber" placeholder="990101-1122334">
-            <button type="button" class="btn btn-default" id="checkSales" onclick="SellMask()">확인</button>
+            <button type="button" class="btn btn-outline-dark" id="checkSales" onclick="SellMask()">확인</button>
+            </div>
           </form>
         </div>
       </div>
-      <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</div>
+
       <!-- The core Firebase JS SDK is always required and must be listed first -->
       <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
 
@@ -276,6 +236,34 @@
   }
   return true;
 }
+//구매자가 구매할 수 있는지 확인하는 함수
+function CanPurchase(){
+  var name = document.getElementById('name').value;
+  var civilNumber = document.getElementById('civilNumber').value;
+
+  var canPurchase_query =  db.collection("observer").doc("purchase_record").collection("record_set").where("name", "==", name).where("civilNumber", "==", civilNumber);
+      
+      var result = "";
+      canPurchase_query
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            result +=doc.data().time.toDate().toLocaleString();
+        });
+        if(result){
+         return false;
+        }
+        else{
+          return true;
+        }
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+     }
+
 
         function StoreBuyerListInDB() {
           var serialNumber = document.getElementById("serialNumber3").value;
@@ -308,12 +296,19 @@
             alert('제대로 입력해주세요!');
             return;
           } 
-          else if(count <0 || count >3){
+          //갯수가 0개이상 3개이해
+          else if(count <0 || count >=3){
             alert('1인당 3개 이하의 마스크만 구매 가능합니다! 다시 입력해주세요!');
             return;
           }
-          else if(ValidateCivilNumber(civilNumber)){
+          //주민번호 유효성
+          else if(!ValidateCivilNumber(civilNumber)){
             alert('주민번호가 유효하지 않습니다.');
+            return;
+          }
+          //전체 구매자 db에 이름, 주민번호가 같은사람이 있을경우 등록 불가
+          else if(!CanPurchase()){
+            alert('이번주에 이미 구매하셨습니다.');
             return;
           }
           else {
@@ -345,7 +340,7 @@
               .then(function(docRef) {
                 console.log("Document written with ID: ", docRef.id);
                 alert("observer 저장 완료!");
-                setTimeout(GetTransactionDataFromDB(), 3000);
+                setTimeout(GetDataFromDB(), 3000);
               })
               .catch(function(error) {
                 console.error("Error adding document: ", error);
@@ -356,7 +351,7 @@
         //마스크 판매
         function SellMask() {
           //결과가 ok라면 alert('ok') MakeBuyerListTable(serialNumber,  count,name,civilNumber) else alert('false') return
-
+          //트랜잭션 결과를 리턴받아 result에 저장해야함. 현재는 ok로 놔둠.
           var result = "ok";
           if (result == "ok") {
             alert('트랜잭션 성공');
@@ -399,7 +394,22 @@
           }
         });
       </script>
+<script>
+  //주민번호 자동 하이픈 기능
+  function setCivilNumber(obj)
+{
+ju = obj.value;
+ju = ju.replace("-","");
+if(ju.length > 6)
+{
+ju1 = ju.substring(0,6);
+ju2 = ju.substring(6,ju.length);
 
+obj.value = ju1+"-"+ju2;
+}
+
+}
+</script>
 </body>
 
 </html>
