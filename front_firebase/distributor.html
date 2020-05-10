@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
-    <script src="./web3.min.js"></script>
-    <script src="./web3Init.js"></script>
         <script src="./MyFunctions.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- 합쳐지고 최소화된 최신 CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+      
 
-<!-- 부가적인 테마 -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
-<style>
-  body {
-    height: 100%;
-display: -ms-flexbox;
-color: #111;
-box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
-}
-</style>
     <meta charset="utf-8">
     <title>Dsitributor Page</title>
   </head>
@@ -54,46 +43,17 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
 			<tbody  >
         <tr>
           <td>시간</td>
-					<td>123456789</td>
+					<td>123</td>
           <td>제조사1</td>
           <td>20</td>
 				</tr>
         <tr>
           <td>시간</td>
-					<td>123456789</td>
+					<td>456789</td>
           <td>제조사1</td>
           <td>20</td>
 				</tr>
-        <tr>
-          <td>시간</td>
-					<td>123456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-          <td>시간</td>
-					<td>123456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-          <td>시간</td>
-					<td>123456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-          <td>시간</td>
-					<td>123456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-          <td>시간</td>
-					<td>123456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
+      
 
 			</tbody>
 		</table>
@@ -104,16 +64,19 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
   <div class="container">
     <form class="form-inline">
       <div class="form-group">
-        <label for="serialNumber1">일련번호</label>
-      <input type="text" class="form-control" id="serialNumber2" placeholder="일련번호">
-        <label for="toSeller">판매사</label>
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">일련번호</span>
+        </div>
+      <input type="text" class="form-control" id="serialNumber1" placeholder="일련번호">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">판매사</span>
       </div>
+      
       <input type="text" class="form-control" id="toSeller" placeholder="판매사1">
-      <div class="form-group">
-        <label for="count1">개수</label>
-        <input type="number" class="form-control" id="count1" placeholder="Box 단위(1Box = 500개)">
-      </div>
-      <button type="submit" class="btn btn-default" id="sendMask">보내기</button>
+    
+      
+      <button type="submit" class="btn btn-outline-dark" id="sendMask">보내기</button>
+    </div>
     </form>
   </div>
   <br><br>
@@ -134,6 +97,7 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
   					<th>일련번호</th>
             <th>제조사</th>
             <th>유통사</th>
+            <th>판매사</th>
             <th>개수</th>
             <th>입고/판매</th>
   				</tr>
@@ -144,58 +108,19 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
   					<td>123456789</td>
             <td>제조사1</td>
             <td>유통사2</td>
+            <td>판매사2</td>
             <td>20</td>
             <td>판매</td>
   				</tr>
           <tr>
             <td>시간</td>
-            <td>123456789</td>
+  					<td>123456789</td>
             <td>제조사1</td>
             <td>유통사2</td>
-            <td>20</td>
-            <td>판매</td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>123456789</td>
-            <td>제조사1</td>
-            <td>유통사2</td>
-            <td>20</td>
-            <td>판매</td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>123456789</td>
-            <td>제조사1</td>
             <td>None</td>
             <td>20</td>
             <td>입고</td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>123456789</td>
-            <td>제조사1</td>
-            <td>None</td>
-            <td>20</td>
-            <td>입고</td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>123456789</td>
-            <td>제조사1</td>
-            <td>None</td>
-            <td>20</td>
-            <td>입고</td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>123456789</td>
-            <td>제조사1</td>
-            <td>None</td>
-            <td>20</td>
-            <td>입고</td>
-          </tr>
-
+  				</tr>
   			</tbody>
   		</table>
   	</div>
@@ -213,8 +138,7 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
   </div>
 </div>
 <!-- 거래내역 끝 -->
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
 <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
 
@@ -233,7 +157,7 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
     function SendMask(){
       var serialNumber = document.getElementById("serialNumber1");
       var toSeller = document.getElementById("toSeller");
-      var count = document.getElementById("count1");
+      //var count = document.getElementById("count1");
 
       //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
     }
@@ -245,6 +169,31 @@ box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
     function MakeTransactionListTable(){
 
     }
+  </script>
+  <script>
+    //테이블 행 클릭시 해당 정보 가져오는 JQuery  
+      $("#inventoryTable tr").click(function(){     
+   
+   var str = "";
+   var tdArr = new Array();    // 배열 선언
+       
+   // 현재 클릭된 Row(<tr>)
+   var tr = $(this);
+   var td = tr.children();
+  
+   // tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+   console.log("클릭한 Row의 모든 데이터 : "+tr.text());
+              
+              // 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+              td.each(function(i){
+                  tdArr.push(td.eq(i).text());
+              });
+                      
+              $('#serialNumber1').val(tdArr[1]);
+          
+        
+   });
+   
   </script>
   </body>
 </html>
