@@ -680,9 +680,9 @@ const contract = new web3.eth.Contract(contractAbi, contractAddress);
 //const pk = Buffer.from('7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', 'hex');
 
 exports.getMaskInfo = async function(req, res){
-   let maskNum = req.params.maskNum;
+   let maskNum = req.params.tokenId;
    try{
-      const result = await contract.methods.Masks(maskNum).call();
+      const result = await contract.methods.Masks(tokenId).call();
       console.log(result);
       res.send(result);
    }catch(err){
@@ -725,7 +725,11 @@ exports.MaskMaking = function(req, res){ // param : uid
 			
 				web3.eth.sendSignedTransaction(raw)
 					.once('transactionHash', (hash) => {
-						res.send('transactionHash: https://roptsten.etherscan.io/tx/' + hash);
+						let result = new Object();
+						result.status = 'success'; //성공시
+						result.txUrl = 'https://ropsten.etherscan.io/tx/' + hash; //트랜잭션 조회 url
+						
+						res.send(JSON.stringify(result));
 					})
 					.on('error', console.error);
 			});
@@ -736,12 +740,11 @@ exports.MaskMaking = function(req, res){ // param : uid
    
 }
 
-exports.dealMasks = function(req, res){ //param: sender uid, receiver address, tokenId
-	let send_uid = req.params.send_uid;
-	let recv_addr = req.params.recv_addr;
-	let token_Id = req.params.token_id;
+exports.dealMasks = async function(req, res){ //param: sender uid, receiver address, tokenId
+	let send_uid = req.params.send_uid; //보내는사람 uid
+	let recv_addr = req.params.recv_addr; //받는사람 지갑주소
+	let token_Id = req.params.token_id; //보낼 토큰 ID
 	let db = fb.firestore();
-	console.log(token_Id);
 	let usersRef = db.collection("users").doc(send_uid);
 
 	usersRef.get().then(doc => {
@@ -749,7 +752,7 @@ exports.dealMasks = function(req, res){ //param: sender uid, receiver address, t
 		let privatekey = doc.data().privateKey;
 
 		const pk = Buffer.from(privatekey,'hex');
-
+		console.log(contract.methods.dealMasks(recv_addr, token_Id)); //컨트랙트에서 리턴값받아서 보낼수있는지없는지 체크 예정
 		web3.eth.getTransactionCount(account, (err, txCount) =>{
 
 			const txObject = {
@@ -769,9 +772,19 @@ exports.dealMasks = function(req, res){ //param: sender uid, receiver address, t
 		
 			web3.eth.sendSignedTransaction(raw)
 				.once('transactionHash', (hash) => {
-					console.log('transactionHash: https://roptsten.etherscan.io/tx/' + hash);
+					console.log(hash);
+					let data = new Object();
+					data.status = 'success';
+					data.txUrl = 'transactionHash: https://ropsten.etherscan.io/tx/' + hash;
+					
+					res.send(JSON.stringify(data));
 				})
-				.on('error', console.error);
+				.once('receipt', console.log)
+				.on('error', (error) =>{
+					let data = new Object();
+					data.status = 'fail';
+					data.errMsg = '보유한 토큰을 확인하세요.';
+				});
 		});
 	});
 }

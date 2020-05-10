@@ -12,8 +12,8 @@ app.get('/', function(req, res){
 })
 
 //contract_test.js
-app.get('/maskMaking/:uid', contract.MaskMaking); //마스크 생산, 
-app.get('/getMaskInfo/:maskNum', contract.getMaskInfo);
+app.get('/maskMaking/:uid', contract.MaskMaking); //마스크 생산, json return (성공시 status : 'success', txUrl : '~~'(트랜잭션 조회 url))
+app.get('/getMaskInfo/:tokenId', contract.getMaskInfo);
 app.get('/dealMasks/:send_uid/:recv_addr/:token_id', contract.dealMasks);
 
 //etherscan.js

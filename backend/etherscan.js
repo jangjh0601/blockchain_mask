@@ -42,7 +42,7 @@ exports.getMakerHistory = function(req, res){ //제조사 생성내역, 거래�
             let deal = new Array();
             for(let tmp in result){
                 //console.log('now : ' + tmp + ', ' + result[tmp]['to']);
-                if(result[tmp]['to'] == req.params.address.toLowerCase()){ //생성내역
+                if(result[tmp]['to'] == req.params.address.toLowerCase()){ //생성내역, 지금은 거래완료한 토큰도 보이는방식, 거래한토큰은 거르는식으로 구현해야함.
                     let data = new Object();
                     data.time = result[tmp]['timeStamp'];
                     data.tokenId = result[tmp]['tokenID'];
