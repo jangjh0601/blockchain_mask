@@ -1441,24 +1441,36 @@ contract ERC721 is Context, ERC165, IERC721, IERC721Metadata, IERC721Enumerable 
  */
 contract maskSaver is ERC721 {
 
-    uint256 public Masks; // 첫 아이템의 인덱스는 0
+    uint256[] public Masks;
     address public owner;
     
-    mapping(address=>uint256[]) a;
+    mapping(address=>uint256) internal token;
+    address[] internal addressList;
     
     constructor() public ERC721("Mask", "MSK") {
             owner = msg.sender;
     }
     
-    // 이벤트 필요하면 어떤게 필요한지 말해주셔
-    event Makemask(uint256 indexed tokenId, string indexed _name, address indexed _account, string _Message);
-    event DealEvent(address _from, address _to, uint256 _tokenId, uint256 _amount, string _Message);
+    event Makemask(uint256 indexed tokenId, address indexed _account, string _Message);
+    event DealEvent(address _from, address _to, uint256 _tokenId, string _Message);
     event SellEvent(address _from, uint256 _tokenId, string _Message);
     event Illegal(address _from, uint256 _tokenId);
     
+    function add(address _key, uint256 _value) public {
+        token[_key] = _value;
+        addressList.push(_key);
+    }
+    
+    function contains(address _key) public view returns (bool) {
+        return token[_key] != 0;
+    }
+    
+    function getByKey(address _key) public view returns (uint256) {
+        return token[_key];
+    }
+    
     /**
      * @dev mask making start with tokenId for order
-     * @param _manuname string to write mask manufacturerName
      */
     function _maskMaking() public {
         //허가된 사람만.
@@ -1466,13 +1478,11 @@ contract maskSaver is ERC721 {
         Masks.push(now);
         uint256 tokenId = Masks.length - 1; 
         _mint(msg.sender, tokenId);
-        maskIDIntList.push(tokenId);
-        emit Makemask(tokenId, _manuname, msg.sender, "Making masks...");
+        emit Makemask(tokenId, msg.sender, "Making masks...");
     }
     
     // deal function
     function dealMasks(address _to, uint256 _tokenId) public {
-        require(checkDate(_tokenId));
         require(ownerOf(_tokenId) == msg.sender);
         
         transferFrom(msg.sender, _to, _tokenId);
@@ -1484,9 +1494,7 @@ contract maskSaver is ERC721 {
         
         emit DealEvent(msg.sender, _to, _tokenId, "Dealing masks...");
     }
-    
-    // 판매사에서 다 팔고 어떠한 _collect 주소로 보낼때 그 _collect 결정해놓을지
-    // 아니면 이렇게 함수로 받을지? 고민 필요
+ 
     function sellMasks(address _collect, uint256 _tokenId) public {
         require(ownerOf(_tokenId) == msg.sender);
         safeTransferFrom(msg.sender, _collect, _tokenId);
@@ -1494,16 +1502,9 @@ contract maskSaver is ERC721 {
         emit SellEvent(msg.sender, _tokenId, "Selling masks...");
     }
     
-    // 소각하게 되면 _collect 계정에 있는 _tokenId 중에 90일 지난거 소각할지 여부
     function burnToken(uint256 _tokenId) public {
         // if 60days later after sold mask, burn token
-        require(checkDate90(_tokenId));
         _burn(_tokenId);
-    }
-    
-    // for burn token
-    function checkDate90(uint256 _tokenId) public view returns (bool) {
-        return (Masks[_tokenId].date + 90 days > block.timestamp);
     }
     
 } 
