@@ -10,13 +10,16 @@ app.use(bodyParser.json());
 app.get('/', function(req, res){
     res.send("welcome");
 })
-//app.get('/send', contract.sendTransfer);
-app.get('/maskMaking/:Id/:Supply', contract.MaskMaking); //마스크 생산, 
-app.get('/getMaskInfo/:maskNum', contract.getMaskInfo);
 
+//contract_test.js
+app.get('/maskMaking/:uid', contract.MaskMaking); //마스크 생산, 
+app.get('/getMaskInfo/:maskNum', contract.getMaskInfo);
+app.get('/dealMasks/:send_uid/:recv_addr/:token_id', contract.dealMasks);
+
+//etherscan.js
 app.get('/normalTx/:address', etherscan.normalTx); //트랜잭션조회
 app.get('/tokenInfo/:address', etherscan.getTokenInfofromWallet);//지갑주소의 토큰거래내역 조회
-
+app.get('/makerhistory/:address', etherscan.getMakerHistory); // 제조사 생성내역, 거래내역조회, json return
 
 /*
 #contract

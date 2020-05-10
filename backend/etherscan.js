@@ -5,7 +5,7 @@ const util = require('util');
 
 
 const myApi = 'DI2QYXMJ7U1UY4G8AAE175TC33B3V3SGSE';
-const contractaddress = '0x781964d811ab08e584f854572ebd2305c93a1c3f';
+const contractaddress = "0x6c28197b05a41145e35eb44e3e05b326095ba1d6";
 
 exports.normalTx = function(req, res){
     let url = util.format('http://api-ropsten.etherscan.io/api?module=account&action=txlist&address=%s&startblock=0&endblock=99999999&sort=asc&apikey=%s', req.params.address, myApi);
@@ -30,6 +30,44 @@ exports.getTokenInfofromWallet = function(req, res){
     });
 };
 
+exports.getMakerHistory = function(req, res){ //제조사 생성내역, 거래내역 조회
+    let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
+    request(url, function(err, response, body){
+        if(!err && response.statusCode == 200){
+            let json = JSON.parse(body);
+            let result = json['result'];
+
+            let total = new Object();
+            let create = new Array();
+            let deal = new Array();
+            for(let tmp in result){
+                //console.log('now : ' + tmp + ', ' + result[tmp]['to']);
+                if(result[tmp]['to'] == req.params.address.toLowerCase()){ //생성내역
+                    let data = new Object();
+                    data.time = result[tmp]['timeStamp'];
+                    data.tokenId = result[tmp]['tokenID'];
+                    data.num = '1';
+
+                    create.push(data);
+                }else{ //거래내역
+                    let data = new Object();
+                    data.time = result[tmp]['timeStamp'];
+                    data.tokenId = result[tmp]['tokenID'];
+                    data.num = '1';
+                    data.maker = result[tmp]['from'];
+                    data.dealer = result[tmp]['to'];
+
+                    deal.push(data);
+                }
+            }
+            total.createHistory = create;
+            total.dealHistory = deal;
+            res.send(JSON.stringify(total));
+        }else{
+            res.send('err' + body);
+        };
+    });
+}
 /*
 #deprecated
 exports.checkwallet = function(req, res){
