@@ -33,123 +33,6 @@
   </div>
   <h1 class="text-center">판매사 페이지</h1>
   <hr><br>
-  <!-- 판매사 란 -->
-  <div class="container">
-    <div class="panel panel-default">
-      <h1 class="text-center">재고내역</h1>
-      <hr>
-      <div class=".col-md-6 .col-md-offset-3">
-        <div id="table-wrapper" style="height: 300px; overflow-y: scroll;">
-          <table class="table table-hover" id="inventoryTable">
-            <thead>
-              <tr>
-                <th>시간</th>
-                <th>일련번호</th>
-                <th>판매사</th>
-                <th>유통사</th>
-                <th>개수</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 유통사 확인란 -->
-  <br><br>
-  <div class="container">
-    <div class="panel panel-default">
-      <h1 class="text-center">거래내역</h1>
-      <hr>
-      <div class=".col-md-6 .col-md-offset-3">
-        <div id="table-wrapper" style="height: 300px; overflow-y: scroll;">
-          <table class="table table-hover" id="transactionListTable">
-            <thead>
-              <tr>
-                <th>시간</th>
-                <th>일련번호</th>
-                <th>판매사</th>
-                <th>유통사</th>
-                <th>개수</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>시간</td>
-                <td>123456789</td>
-                <td>판매사1</td>
-                <td>유통사1</td>
-                <td>20</td>
-              </tr>
-
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- 거래내역 확인 및 소비자 정보 추가 -->
-  <br><br>
   <div class="container">
     <div class="panel panel-default">
       <h1 class="text-center">판매내역</h1>
@@ -203,6 +86,63 @@
       </div>
     </div>
   </div>
+  <br>
+
+  <!-- 판매사 란 -->
+  <div class="container">
+    <div class="panel panel-default">
+      <h1 class="text-center">재고내역</h1>
+      <hr>
+      <div class=".col-md-6 .col-md-offset-3">
+        <div id="table-wrapper" style="height: 300px; overflow-y: scroll;">
+          <table class="table table-hover" id="inventoryTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>일련번호</th>
+                <th>개수</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTbody">
+          
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 유통사 확인란 -->
+  <br><br>
+  <div class="container">
+    <div class="panel panel-default">
+      <h1 class="text-center">입고내역</h1>
+      <hr>
+      <div class=".col-md-6 .col-md-offset-3">
+        <div id="table-wrapper" style="height: 300px; overflow-y: scroll;">
+          <table class="table table-hover" id="receiptHistoryTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>일련번호</th>
+                <th>유통사</th>
+                <th>판매사</th>
+                <th>개수</th>
+              </tr>
+            </thead>
+            <tbody id="receiptHistoryTbody">
+              
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 거래내역 확인 및 소비자 정보 추가 -->
+  <br><br>
+  
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
@@ -223,9 +163,18 @@
     function MakeInventoryTable() {
 
     }
-    //거래내역 테이블 만드는 함수
-    function MakeTransactionListTable() {
+    //입고내역 테이블 만드는 함수
+    function MakeReceiptHistoryTable() {
+      var myTbody = document.getElementById("receiptHistoryTbody");
+      var ourRequest = new XMLHttpRequest();
 
+      ourRequest.open('GET', 'http://localhost:8000/makerhistory/' + userAddr);
+      ourRequest.onload = function () {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+        renderMakeReceiptHistoryHTML(ourData);
+      };
+      ourRequest.send();
     }
     //구매자 리스트 테이블 만드는 함수
     function MakeBuyerListTable() {
@@ -246,7 +195,7 @@
     }
     //구매자가 구매할 수 있는지 확인하는 함수
     function CanPurchase() {
-return new Promise(function(resolve, reject){
+
   var name = document.getElementById('name').value;
       var civilNumber = document.getElementById('civilNumber').value;
 
@@ -255,7 +204,7 @@ return new Promise(function(resolve, reject){
 
       var result = "";
       
-     canPurchase_query
+     return canPurchase_query
         .get()
         .then(function (querySnapshot) {
           querySnapshot.forEach(function (doc) {
@@ -265,21 +214,20 @@ return new Promise(function(resolve, reject){
           if (result) {
             console.log("canPurchase", false);
             alert(false);
-            resolve(false);
+            return false;
           } else {
             alert(true);
             console.log("canPurchase", true);
-            resolve(true);
+            return true;
           }
         })
         .catch(function (error) {
           alert(false);
           console.log("Error getting documents: ", error);
-          resolve(false);
+          return false;
         });
 
-      
-});
+
      
     }
 
@@ -289,10 +237,8 @@ return new Promise(function(resolve, reject){
       var name = document.getElementById("name").value;
       var count = document.getElementById("count3").value;
       var civilNumber = document.getElementById("civilNumber").value;
-      var canPurchase = CanPurchase().then(function(resolvedData){
-        return resolvedData;
-      });
-      sleep(3222);
+    
+  
       //DB에 시리얼넘버, 이름, 개수, 주민번호 넣기
       var docRef = db.collection("users").doc(firebaseEmailAuth.currentUser.uid);
       var docRef2 = db.collection("users").doc(firebaseEmailAuth.currentUser.uid).collection("buyers");
@@ -330,12 +276,17 @@ return new Promise(function(resolve, reject){
         return;
       }
       //전체 구매자 db에 이름, 주민번호가 같은사람이 있을경우 등록 불가
-      else if (!canPurchase) {
-        alert('이번주에 이미 구매하셨습니다.');
+      // else if (!canPurchase) {
+      //   alert('이번주에 이미 구매하셨습니다.');
+      //   return;
+      // }
+      CanPurchase().then(function(result){
+        if(!result){
+          alert('이번주에 이미 구매하셨습니다.');
         return;
-      }
-      else{
-        //해당seller의 db에 저장
+        }
+        else{
+             //해당seller의 db에 저장
         docRef2.add({
             name: name,
             serialNumber: serialNumber,
@@ -369,7 +320,11 @@ return new Promise(function(resolve, reject){
             console.error("Error adding document: ", error);
             alert("observer 저장 실패!");
           });
+        
         }
+      });
+     
+     
     }
     //마스크 판매
     function SellMask() {
@@ -435,6 +390,83 @@ return new Promise(function(resolve, reject){
       }
 
     }
+  </script>
+ <!-- httpRequest JSON parsing script -->
+ <script type="text/javascript">
+  firebaseEmailAuth.onAuthStateChanged(function (user) {
+
+    if (user) {
+      //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+      var docRef = db.collection("users").doc(firebaseEmailAuth.currentUser.uid);
+
+      docRef.get().then(function (doc) {
+        if (doc.exists) {
+          userAddr = doc.data().addr;
+          userName = doc.data().name;
+          userEmail = user.email;
+          console.log(user.email + " 님이 로그인했습니다." + " 계좌 : " + userAddr + " 이름 :" + userName);
+         MakeReceiptHistoryTable();
+          MakeInventoryTable();
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+
+
+
+      //자바스크립트 dom 선택자를 통해서 네비게이션 메뉴의 엘리먼트 변경해주기
+
+
+      //alert(userInfo.userid);  //uid는 db에서 user 테이블의 각 개체들의 pk 인데, 이 값은 인증에서 생성된 아이디의 pk 값과 같다. *중요!
+
+      return true;
+    }
+  });
+</script>
+
+  <script>
+     function renderMakeReceiptHistoryHTML(data) {
+      var htmlString = "";
+
+      for (i = 0; i < data.dealHistory.length; i++) {
+        htmlString += "<tr><td>" + new Date(data.dealHistory[i].time * 1000).toLocaleString() + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].tokenId + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].dealer + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].seller + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].nnum + "</td></tr>";
+      }
+      $("#receiptHistoryTbody").append(htmlString);
+    }
+
+    function IsSuccessOrFail(data) {
+      if (data.status === "fail") {
+        alert('실패');
+      } else {
+        alert('성공');
+      }
+    }
+    //마스크 토큰 없애는 함수. 판매완료됬을때 실행
+    function BurnMask() {
+      var serialNumber = document.getElementById("serialNumber2").value;
+      var toDistributor = document.getElementById("toDistributor").value;
+      console.log(serialNumber, toDistributor);
+      //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
+      var ourRequest = new XMLHttpRequest();
+      ourRequest.open('GET', 'http://localhost:8000/dealMasks/' + firebaseEmailAuth.currentUser.uid + '/' +
+        toDistributor +
+        '/' + serialNumber);
+      ourRequest.onload = function () {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+        IsSuccessOrFail(ourData);
+      };
+      ourRequest.send();
+
+    }
+  </script>
   </script>
 </body>
 

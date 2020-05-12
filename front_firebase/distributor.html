@@ -40,20 +40,8 @@
           <th>개수</th>
 				</tr>
 			</thead>
-			<tbody  >
-        <tr>
-          <td>시간</td>
-					<td>123</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-        <tr>
-          <td>시간</td>
-					<td>456789</td>
-          <td>제조사1</td>
-          <td>20</td>
-				</tr>
-      
+			<tbody  id="inventoryTbody">
+       
 
 			</tbody>
 		</table>
@@ -75,7 +63,7 @@
       <input type="text" class="form-control" id="toSeller" placeholder="판매사1">
     
       
-      <button type="submit" class="btn btn-outline-dark" id="sendMask">보내기</button>
+      <button type="submit" class="btn btn-outline-dark" id="sendMask" onclick="SendMask()">보내기</button>
     </div>
     </form>
   </div>
@@ -86,45 +74,47 @@
 <!-- 거래내역 시작 -->
   <div class ="container">
     <div class="panel panel-default">
-    <h1 class="text-center">거래내역</h1>
+    <h1 class="text-center">거래내역 - 입고</h1>
         <hr>
   <div class=".col-md-6 .col-md-offset-3">
   <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
-      <table class="table table-hover" id="transactionListTable">
+      <table class="table table-hover" id="receiptHistoryTable">
   			<thead>
   				<tr>
             <th>시간</th>
-  					<th>일련번호</th>
+            <th>일련번호</th>
             <th>제조사</th>
             <th>유통사</th>
-            <th>판매사</th>
             <th>개수</th>
-            <th>입고/판매</th>
   				</tr>
   			</thead>
-  			<tbody  >
-          <tr>
-            <td>시간</td>
-  					<td>123456789</td>
-            <td>제조사1</td>
-            <td>유통사2</td>
-            <td>판매사2</td>
-            <td>20</td>
-            <td>판매</td>
-  				</tr>
-          <tr>
-            <td>시간</td>
-  					<td>123456789</td>
-            <td>제조사1</td>
-            <td>유통사2</td>
-            <td>None</td>
-            <td>20</td>
-            <td>입고</td>
-  				</tr>
+  			<tbody id="receiptHistoryTbody" >
+          
   			</tbody>
   		</table>
   	</div>
     <hr>
+    <div class ="container">
+      <div class="panel panel-default">
+      <h1 class="text-center">거래내역 - 판매</h1>
+          <hr>
+    <div class=".col-md-6 .col-md-offset-3">
+    <div id="table-wrapper"style="height: 300px; overflow-y: scroll;">
+        <table class="table table-hover" id="salesHistoryTable">
+          <thead>
+            <tr>
+              <th>시간</th>
+              <th>일련번호</th>
+              <th>유통사</th>
+              <th>판매사</th>
+              <th>개수</th>
+            </tr>
+          </thead>
+          <tbody  id="saledHistoryTbody">
+            
+          </tbody>
+        </table>
+      </div>
     <!-- 사용하지않게됨 -->
     <!-- <div class="container" style="margin-bottom:50px">
       <form class="form-inline">
@@ -165,9 +155,22 @@
     function MakeInventoryTable(){
 
     }
-    //거래내역 테이블 만드는 함수
-    function MakeTransactionListTable(){
+    //거래내역 - 입고 테이블 만드는 함수
+    function MakeReceiptHistoryTable(){
 
+    }
+     //거래내역 - 판매 테이블 만드는 함수
+     function MakeSalesHistoryTable() {
+      var myTbody = document.getElementById("salesHistoryTbody");
+      var ourRequest = new XMLHttpRequest();
+
+      ourRequest.open('GET', 'http://localhost:8000/makerhistory/' + userAddr);
+      ourRequest.onload = function () {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+        renderSalesHistoryHTML(ourData);
+      };
+      ourRequest.send();
     }
   </script>
   <script>
@@ -194,6 +197,85 @@
         
    });
    
+  </script>
+
+  <script>
+      //마스크 보내기 함수
+      function SendMask() {
+      var serialNumber = document.getElementById("serialNumber1").value;
+      var toSeller = document.getElementById("toSeller").value;
+      console.log(serialNumber, toSeller);
+      //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
+      var ourRequest = new XMLHttpRequest();
+      ourRequest.open('GET', 'http://localhost:8000/dealMasks/' + firebaseEmailAuth.currentUser.uid + '/' +
+        toSeller +
+        '/' + serialNumber);
+      ourRequest.onload = function () {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+        IsSuccessOrFail(ourData);
+      };
+      ourRequest.send();
+
+    }
+    function IsSuccessOrFail(data) {
+      if (data.status === "fail") {
+        alert('실패');
+      } else {
+        alert('성공');
+      }
+    }
+   
+    
+    function renderSalesHistoryHTML(data) {
+      var htmlString = "";
+
+      for (i = 0; i < data.dealHistory.length; i++) {
+        htmlString += "<tr><td>" + new Date(data.dealHistory[i].time * 1000).toLocaleString() + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].tokenId + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].num + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].maker + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].dealer + "</td></tr>";
+      }
+      $("#salesHistoryTbody").append(htmlString);
+    }
+  </script>
+
+  
+  <!-- httpRequest JSON parsing script -->
+  <script type="text/javascript">
+    firebaseEmailAuth.onAuthStateChanged(function (user) {
+
+      if (user) {
+        //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+        var docRef = db.collection("users").doc(firebaseEmailAuth.currentUser.uid);
+
+        docRef.get().then(function (doc) {
+          if (doc.exists) {
+            userAddr = doc.data().addr;
+            userName = doc.data().name;
+            userEmail = user.email;
+            console.log(user.email + " 님이 로그인했습니다." + " 계좌 : " + userAddr + " 이름 :" + userName);
+            MakeSalesHistoryTable();
+            MakeReceiptHistoryTable();
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+
+
+
+        //자바스크립트 dom 선택자를 통해서 네비게이션 메뉴의 엘리먼트 변경해주기
+
+
+        //alert(userInfo.userid);  //uid는 db에서 user 테이블의 각 개체들의 pk 인데, 이 값은 인증에서 생성된 아이디의 pk 값과 같다. *중요!
+
+        return true;
+      }
+    });
   </script>
   </body>
 </html>

@@ -34,6 +34,64 @@
   </div>
   <h1 class="text-center">제조사 페이지</h1>
   <hr><br>
+  <div class="container">
+    <div class="panel panel-default">
+      <h1 class="text-center">재고내역</h1>
+      <hr>
+      <div class=".col-md-6 .col-md-offset-3">
+
+        <!-- 재고내역 테이블 시작 -->
+        <div id="table-wrapper" style="height: 300px; overflow-y: scroll;">
+          <table class="table table-hover" id="intentoryTable">
+            <thead>
+              <tr>
+                <th>시간</th>
+                <th>일련번호</th>
+                <th>개수</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryTbody">
+
+
+            </tbody>
+          </table>
+          <!-- 재고내역 테이블 끝 -->
+        </div>
+        <hr>
+<!-- 마스크추가 폼 시작 -->
+<div class="container" style="margin-bottom:20px; margin-top:20px">
+  <form class="form-inline">
+    <div class="form-group">
+      <!-- <label for="count1">개수</label>
+      <input type="number" class="form-control" id="count1" placeholder="Box 단위(1Box = 500개)"> -->
+      <button type="button" class="btn btn-outline-dark" id="addMask" onclick="AddMask()">마스크 추가</button>
+    </div>
+  </form>
+</div>
+<br>
+<!-- 마스크추가 폼 끝 -->
+<!-- 마스크 보내기 폼 시작 -->
+<div class="container">
+  <form class="form-inline">
+    <div class="form-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">일련번호</span>
+      </div>
+
+      <input type="text" class="form-control" id="serialNumber2" placeholder="일련번호">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">유통사</span>
+      </div>
+    </div>
+    <input type="text" class="form-control" id="toDistributor" placeholder="유통사1">
+    <button type="submit" class="btn btn-outline-dark" id="sendMask" onclick="SendMask()">보내기</button>
+  </form>
+</div>
+<!-- 마스크 보내기 폼 끝 -->
+      </div>
+    </div>
+  </div>
+<br><br>
   <!-- 생성내역 시작 -->
   <div class="container">
     <div class="panel panel-default">
@@ -58,36 +116,7 @@
           <!-- 생성내역 테이블 끝 -->
         </div>
         <hr>
-        <!-- 마스크추가 폼 시작 -->
-        <div class="container" style="margin-bottom:20px; margin-top:20px">
-          <form class="form-inline">
-            <div class="form-group">
-              <!-- <label for="count1">개수</label>
-              <input type="number" class="form-control" id="count1" placeholder="Box 단위(1Box = 500개)"> -->
-              <button type="button" class="btn btn-outline-dark" id="addMask" onclick="AddMask()">마스크 추가</button>
-            </div>
-          </form>
-        </div>
-        <br>
-        <!-- 마스크추가 폼 끝 -->
-        <!-- 마스크 보내기 폼 시작 -->
-        <div class="container">
-          <form class="form-inline">
-            <div class="form-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">일련번호</span>
-              </div>
-
-              <input type="text" class="form-control" id="serialNumber2" placeholder="일련번호">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">유통사</span>
-              </div>
-            </div>
-            <input type="text" class="form-control" id="toDistributor" placeholder="유통사1">
-            <button type="submit" class="btn btn-outline-dark" id="sendMask" onclick="SendMask()">보내기</button>
-          </form>
-        </div>
-        <!-- 마스크 보내기 폼 끝 -->
+        
       </div>
     </div>
   </div>
