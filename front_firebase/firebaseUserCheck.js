@@ -1,5 +1,7 @@
 var db = firebase.firestore();
-
+let userAddr = "";
+let userName = "";
+let userEmail = "";
 
   var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
 var firebaseDatabase; //파이어베이스 db 모듈 전역변수
@@ -22,9 +24,10 @@ firebaseDatabase = firebase.database(); //파이어베이스 데이터베이스 
 
         docRef.get().then(function(doc) {
             if (doc.exists) {
-              let addr = doc.data().addr;
-              let name = doc.data().name;
-                document.getElementById("id").textContent = user.email+" 님이 로그인했습니다."+ " 계좌 : "+addr+ " 이름 :"+name;
+              userAddr= doc.data().addr;
+              userName = doc.data().name;
+              userEmail = user.email;
+                document.getElementById("id").textContent = user.email+" 님이 로그인했습니다."+ " 계좌 : "+userAddr+ " 이름 :"+userName;
               //alert(doc.data().addr+" 입니다.");
 
             } else {
