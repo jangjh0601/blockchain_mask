@@ -16,7 +16,6 @@ const fb = require('firebase');
 fb.initializeApp(firebaseConfig);
 
 let Tx = require('ethereumjs-tx').Transaction;
-//https://ropsten.infura.io/v3/df0ff335a16c463d96038903ff43987e
 
 let contractAbi = [
 	{
@@ -662,15 +661,11 @@ let contractAbi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
+]
 
 let contractAddress = "0x2727b026EdB116B20196a1abF32e0cA8311E93e2";
 
 const contract = new web3.eth.Contract(contractAbi, contractAddress);
-//const pk = Buffer.from('7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', 'hex');
-
-//const admin_account = "0x05D38eE2B27615843961719541B3D84D63C58621";
-//const admin_pk = "10BB7A4BB5BAD255DFB9265A4E49AC3CB85F47D3CE8415652278FABAE6AA1552";
 
 let db = fb.firestore();
 
@@ -693,80 +688,55 @@ exports.getMaskInfo = async function(req, res){
 };
 
 exports.MaskMaking = function(req, res){ // param : uid
-	let uid = req.params.uid;
-	
+    let uid = req.params.uid;
+    
 	let usersRef = db.collection("users").doc(uid);
 	usersRef.get().then(doc => {
 		if(!doc.exists){
-			let result = {
-				status: "Fail",
-				errMsg: "Don\'t exist user info"
-			}
+			let result = new Object();
+			result.status = "Fail";
+			result.errMsg = "Don't exist user info";
 			res.send(JSON.stringify(result));
-
 		}else{
 			let maker_account = doc.data().addr;
 
 			const pk = Buffer.from(admin_pk,'hex');
-
-			let callObject = {
-				from: admin_account,
-				gas: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-			}
-			contract.methods.maskMaking(maker_account).call(callObject)
-				.then((result) => {
-					if(result == true){
-						web3.eth.getTransactionCount(admin_account, (err, txCount) =>{
-
-							const txObject = {
-								nonce: web3.utils.toHex(txCount),
-								to: contractAddress,
-								//value: web3.utils.toHex(web3.utils.toWei('0', 'ether')),
-								gasLimit: web3.utils.toHex(2100000),
-								gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-								data: contract.methods.maskMaking(maker_account).encodeABI()
-							};
-						
-							const tx = new Tx(txObject, {'chain':'ropsten'});
-							tx.sign(pk);
-						
-							const serializedTx = tx.serialize();
-							const raw = '0x' + serializedTx.toString('hex');
-							
-							web3.eth.sendSignedTransaction(raw)
-								.once('transactionHash', (hash) => {
-									let result = new Object();
-									result.status = 'Success'; //성공시
-									result.txUrl = 'https://ropsten.etherscan.io/tx/' + hash; //트랜잭션 조회 url
-									
-									res.send(JSON.stringify(result));
-								})
-								.on('error', (err) => {
-									let result = new Object();
-									result.status = 'Fail';
-									result.errMsg = 'Error to transaction sending';
-									result.errDetail = err;
 			
-									res.send(JSON.stringify(result));
-								});
-						});
-					}else{ //If result is not true
+			let txObject = {
+				from: "0x05D38eE2B27615843961719541B3D84D63C58621",
+				gas: 2100000
+			}
+            contract.methods.maskMaking(maker_account).call(txObject)
+                .then((result) => {
+                    if(result == true){
+						console.log(result);
+						contract.methods.maskMaking(maker_account).send(txObject)
+							.on('transactionHash', (hash) => {
+								let data = {
+									status: "Success",
+									txUrl: "https://ropsten.etherscan.io/tx/" + hash
+								}
+
+								res.send(JSON.stringify(data));
+							})
+							.catch((err) => {
+								console.log('Error at send: ' + err);
+							});
+					}else{
 						let data = {
 							status: "Fail",
-							errMsg: "Failed to make mask"
+							errMsg: "Fail to making mask"
 						}
 						res.send(JSON.stringify(data));
-					};
-				});
-		};
-	}).catch((err)=>{
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID",
-			errDetail: err
+					}
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
 		}
-		res.send(JSON.stringify(data));
-	});
+	}).catch((err)=>{
+		console.log('Error', err);
+	})
    
 }
 
@@ -775,71 +745,24 @@ exports.dealMasks = async function(req, res){ //param: sender uid, receiver addr
 	let recv_addr = req.params.recv_addr; //받는사람 지갑주소
 	let token_Id = req.params.token_id; //보낼 토큰 ID
 
+	//let db = fb.firestore();
 	let usersRef = db.collection("users").doc(send_uid);
+
 	usersRef.get().then(doc => {
 		let account = doc.data().addr;
 		let privatekey = doc.data().privateKey;
 
 		const pk = Buffer.from(privatekey,'hex');
-		const data = contract.methods.dealMasks(recv_addr, token_Id); //컨트랙트에서 리턴값받아서 보낼수있는지없는지 체크 예정
-
-		let callObject = {
-			from: account,
-			gas: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-		};
-	
-		contract.methods.dealMasks(recv_addr, token_Id).call(callObject)
-			.then((result) => {
-				if(result == true){
-					web3.eth.getTransactionCount(account, (err, txCount) =>{
-
-						const txObject = {
-							nonce: web3.utils.toHex(txCount),
-							to: contractAddress,
-							//value: web3.utils.toHex(web3.utils.toWei('0', 'ether')),
-							gasLimit: web3.utils.toHex(2100000),
-							gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-							data: contract.methods.dealMasks(recv_addr, token_Id).encodeABI()
-						};
-						const tx = new Tx(txObject, {'chain':'ropsten'});
-						tx.sign(pk);
-					
-						const serializedTx = tx.serialize();
-						const raw = '0x' + serializedTx.toString('hex');
-					
-						web3.eth.sendSignedTransaction(raw)
-							.once('transactionHash', (hash) => {
-								let data = {
-									status: "Success",
-									txUrl: "transactionHash: https://ropsten.etherscan.io/tx/" + hash
-								}
-								res.send(JSON.stringify(data));
-							})
-							.on('error', (err) =>{
-								let data = {
-									status: "Fail",
-									errMsg: "Check your token in stock",
-									errDetail: err
-								}
-								res.send(JSON.stringify(data));
-							});
-					});
-
-				}else{
-					let data = {
-						status: "Fail",
-						errMsg: "Return to revert from dealMasks in contract"
-					}
-					res.send(JSON.stringify(data));
-				}
-			});
+        contract.methods.dealMasks(recv_addr, token_Id).call() //컨트랙트에서 리턴값받아서 보낼수있는지없는지 체크 예정
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
 	})
 	.catch((err) => {
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID"
-		};
-		res.send(JSON.stringify(data));
+		console.log(err);
 	});
 }
 
@@ -848,30 +771,31 @@ exports.getStockList = function(req, res){
 	
 	let usersRef = db.collection("users").doc(uid);
 
-	usersRef.get().then(doc => {
+	usersRef.get().then((doc) => {
 		let account = doc.data().addr;
 
 		const pk = Buffer.from(admin_pk,'hex');
-		let callObject = {
-			from: admin_account,
-			gas: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
-		};
-		contract.methods.tokenByList(account).call(callObject)
-			.then((result) => {
-				let data = {
-					status: "Success",
-					result: result
-				}
-				res.send(JSON.stringify(data));
-			});
-		
+        contract.methods.tokenByList(account).call() //컨트랙트에서 리턴값받아서 보낼수있는지없는지 체크 예정
+            .then((result) => {
+                if(result == 'true'){
+                    let txObject = {
+                        from: admin_account,
+                        gas: 5000000
+                    }
+                    contract.methods.tokenByList(account).send(txObject)
+                        .on('transactionHash',(hash) => {
+                            let data = {
+                                status: 'Success',
+                                txUrl: 'https://ropsten.etherscan.io/tx/' + hash
+                            }
+
+                            res.send(JSON.stringify(data));
+                        })
+                }
+            }) 
 	})
 	.catch((err) => {
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID"
-		};
-		res.send(JSON.stringify(data));
+		console.log(err);
 	});
 }
 

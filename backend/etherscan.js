@@ -47,6 +47,8 @@ exports.getMakerHistory = function(req, res){ //제조사 생성내역, 거래�
                     data.time = result[tmp]['timeStamp'];
                     data.tokenId = result[tmp]['tokenID'];
                     data.num = '1';
+                    data.from = result[tmp]['from'];
+                    data.to = result[tmp]['to'];
 
                     create.push(data);
                 }else{ //거래내역
@@ -68,6 +70,7 @@ exports.getMakerHistory = function(req, res){ //제조사 생성내역, 거래�
         };
     });
 }
+
 /*
 #deprecated
 exports.checkwallet = function(req, res){
