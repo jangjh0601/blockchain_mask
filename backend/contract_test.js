@@ -860,7 +860,7 @@ exports.getStockList = function(req, res){
 			.then((result) => {
 				let data = {
 					status: "Success",
-					result: result
+					stock: result
 				}
 				res.send(JSON.stringify(data));
 			});
