@@ -2,7 +2,7 @@
 
 const request = require('request');
 const util = require('util');
-const functions = require('firebase--functions');
+const functions = require('firebase-functions');
 
 const myApi = 'DI2QYXMJ7U1UY4G8AAE175TC33B3V3SGSE';
 const contractaddress = "0x2727b026EdB116B20196a1abF32e0cA8311E93e2";
@@ -20,12 +20,16 @@ exports.normalTx = functions.https.onRequest((req, res) => {
         }else{
             let data = {
                 status: "Fail",
-                errMsg: "Fail to inquery tx",
+                errMsg: "Fail to inparams tx",
                 errDetail: body
             };
             res.send(JSON.stringify(data));
         };
     });
+
+
+
+
 });
 
 exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
@@ -40,7 +44,7 @@ exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
         }else{
             data = {
                 status: "Fail",
-                errMsg: "Fail to inquery tx",
+                errMsg: "Fail to inparams tx",
                 errDetail: JSON.parse(body)
             }
         };
@@ -68,7 +72,7 @@ exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 
                     from: result[tmp]['from'],
                     to: result[tmp]['to']
                 }
-                if(result[tmp]['to'] == req.params.address.toLowerCase()){ //생성내역, 지금은 거래완료한 토큰도 보이는방식, 거래한토큰은 거르는식으로 구현해야함.
+                if(result[tmp]['to'] == req.params.address){ //생성내역, 지금은 거래완료한 토큰도 보이는방식, 거래한토큰은 거르는식으로 구현해야함.
                     create.push(txInfo);
                 }else{ //거래내역
                     deal.push(txInfo);
@@ -88,7 +92,7 @@ exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 
         };
         res.send(JSON.stringify(data));
     });
-}
+});
 
 /*
 #deprecated
