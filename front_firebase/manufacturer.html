@@ -17,6 +17,7 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
   </script>
 
+
   <meta charset="utf-8">
   <title>Manufacturer Page</title>
 </head>
@@ -158,6 +159,7 @@
                 aria-expanded="false" aria-controls="collapseThree">
                 거래내역
               </button>
+
             </h2>
           </div>
           <div id="collapseThree" class="collapse" aria-labelledby="transactionAccordion">
@@ -221,7 +223,7 @@
       var ourRequest = new XMLHttpRequest();
 
       //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
-      ourRequest.open('GET', 'http://localhost:8000/maskMaking/' + firebaseEmailAuth.currentUser.uid);
+      ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/maskMaking/' + firebaseEmailAuth.currentUser.uid);
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
@@ -237,7 +239,7 @@
       console.log(serialNumber, toDistributor);
       //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
       var ourRequest = new XMLHttpRequest();
-      ourRequest.open('GET', 'http://localhost:8000/dealMasks/' + firebaseEmailAuth.currentUser.uid + '/' +
+      ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/dealMasks/' + firebaseEmailAuth.currentUser.uid + '/' +
         toDistributor +
         '/' + serialNumber);
       ourRequest.onload = function () {
@@ -254,7 +256,7 @@
       var ourRequest = new XMLHttpRequest();
       var exampleInfo = document.getElementById("exampleInfo");
 
-      ourRequest.open('GET', 'http://localhost:8000/makerhistory/' + userAddr);
+      ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/makerhistory/' + userAddr);
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
@@ -291,7 +293,7 @@
       var ourRequest = new XMLHttpRequest();
       var exampleInfo = document.getElementById("exampleInfo");
 
-      ourRequest.open('GET', 'http://localhost:8000/makerhistory/' + userAddr);
+      ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/makerhistory/' + userAddr);
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
@@ -299,7 +301,19 @@
       };
       ourRequest.send();
     }
-
+  //재고내역 테이블 만드는 함수
+  function MakeInventoryTable() {
+      var myTbody = document.getElementById("salesHistoryTbody");
+      var ourRequest = new XMLHttpRequest();
+      ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/stockList/' +
+        userAddr);
+      ourRequest.onload = function () {
+        var ourData = JSON.parse(ourRequest.responseText);
+        console.log(ourData);
+        renderInventoryHTML(ourData);
+      };
+      ourRequest.send();
+    }
     function renderMakeAddedMaskHTML(data) {
       var htmlString = "";
 
@@ -309,9 +323,17 @@
         htmlString += "<td>" + data.createHistory[i].num + "</td></tr>";
       }
       $("#maskListTbody").append(htmlString);
-
     }
+    function renderInventoryHTML(data) {
+      var htmlString = "";
 
+      for (i = 0; i < data.stock.length; i++) {
+        htmlString += "<tr><td>" + new Date(data.stock[i].timeStamp * 1000).toLocaleString() + "</td>";
+        htmlString += "<td>" + data.stock[i].tokenId + "</td>";
+        htmlString += "<td>" + data.stock[i].num + "</td></tr>";
+      }
+      $("#inventoryTbody").append(htmlString);
+    }
     function renderMakeTransactionHTML(data) {
       var htmlString = "";
 
@@ -319,17 +341,17 @@
         htmlString += "<tr><td>" + new Date(data.dealHistory[i].time * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.dealHistory[i].tokenId + "</td>";
         htmlString += "<td>" + data.dealHistory[i].num + "</td>";
-        htmlString += "<td>" + data.dealHistory[i].maker + "</td>";
-        htmlString += "<td>" + data.dealHistory[i].dealer + "</td></tr>";
+        htmlString += "<td>" + data.dealHistory[i].from + "</td>";
+        htmlString += "<td>" + data.dealHistory[i].to + "</td></tr>";
       }
       $("#transactionListTbody").append(htmlString);
     }
 
     function IsSuccessOrFail(data) {
-      if (data.status === "fail") {
-        alert('실패');
-      } else {
+      if (data.status === "Success") {
         alert('성공');
+      } else {
+        alert('실패');
       }
     }
   </script>
