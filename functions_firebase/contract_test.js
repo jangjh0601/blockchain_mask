@@ -676,28 +676,18 @@ let db = fb.firestore();
 		global.admin_pk = admin_pk;
 	});
 
-exports.getMaskInfo = functions.https.onRequest((req, res)=>{
-	let maskNum = req.params.tokenId;
-	const result = contract.methods.Masks(tokenId).call()
-	.then((result) => {
-			let data = {
-				status: "Success",
-				result: result
-			}
-			res.send(JSON.stringify(data));
-		})
-	.catch((err) => {
-		let data = {
-			status: "Fail",
-			errMsg: "Fail to get mask info",
-			errDetail: err
-		}
-		res.send(JSON.stringify(data));
-	})
-   
-});
+exports.getMaskInfo = async function(req, res){
+   let maskNum = req.params.tokenId;
+   try{
+      const result = await contract.methods.Masks(tokenId).call();
+      console.log(result);
+      res.send(result);
+   }catch(err){
+      res.send("error");
+   }
+};
 
-exports.MaskMaking = functions.https.onRequest((req, res)=>{ // param : uid
+exports.MaskMaking = function(req, res){ // param : uid
 	let uid = req.params.uid;
 	
 	let usersRef = db.collection("users").doc(uid);
@@ -773,9 +763,9 @@ exports.MaskMaking = functions.https.onRequest((req, res)=>{ // param : uid
 		res.send(JSON.stringify(data));
 	});
    
-});
+}
 
-exports.dealMasks = functions.https.onRequest((req, res)=>{ //param: sender uid, receiver address, tokenId
+exports.dealMasks = async function(req, res){ //param: sender uid, receiver address, tokenId
 	let send_uid = req.params.send_uid; //보내는사람 uid
 	let recv_addr = req.params.recv_addr; //받는사람 지갑주소
 	let token_Id = req.params.token_id; //보낼 토큰 ID
@@ -846,9 +836,9 @@ exports.dealMasks = functions.https.onRequest((req, res)=>{ //param: sender uid,
 		};
 		res.send(JSON.stringify(data));
 	});
-});
+}
 
-exports.getStockList = functions.https.onRequest((req, res)=>{
+exports.getStockList = function(req, res){
 	let uid = req.params.uid;
 	
 	let usersRef = db.collection("users").doc(uid);
@@ -878,7 +868,7 @@ exports.getStockList = functions.https.onRequest((req, res)=>{
 		};
 		res.send(JSON.stringify(data));
 	});
-});
+}
 
 //MaskMaking('maker A', '0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67');
 //dealMasks('0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', '0xb93428830a28aD774DB9A3937fC8962fb4429785', '2')
