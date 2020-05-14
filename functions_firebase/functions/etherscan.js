@@ -10,8 +10,8 @@ const contractaddress = "0x2727b026EdB116B20196a1abF32e0cA8311E93e2";
 exports.normalTx = functions.https.onRequest((req, res) => {
     let url = util.format('http://api-ropsten.etherscan.io/api?module=account&action=txlist&address=%s&startblock=0&endblock=99999999&sort=asc&apikey=%s', req.params.address, myApi);
     console.log('start normalTx');
-    request(url, function(err, response, body){
-        if(!err && response.statusCode == 200){
+    request(url, (err, response, body)=>{
+        if(!err && response.statusCode === 200){
             let data = {
                 status: "Success",
                 txDetail: body
@@ -24,19 +24,15 @@ exports.normalTx = functions.https.onRequest((req, res) => {
                 errDetail: body
             };
             res.send(JSON.stringify(data));
-        };
+        }
     });
-
-
-
-
 });
 
 exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
     let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
-    request(url, function(err, response, body){
+    request(url, (err, response, body)=>{
         let data = new Object();
-        if(!err && response.statusCode == 200){
+        if(!err && response.statusCode === 200){
             data = {
                 status: "Success",
                 txDetails: JSON.parse(body)
@@ -47,7 +43,7 @@ exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
                 errMsg: "Fail to inparams tx",
                 errDetail: JSON.parse(body)
             }
-        };
+        }
         res.send(JSON.stringify(data));
     });
 });
@@ -55,8 +51,8 @@ exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
 exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 생성내역, 거래내역 조회
     let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
     let data = new Object();
-    request(url, function(err, response, body){
-        if(!err && response.statusCode == 200){
+    request(url, (err, response, body) => {
+        if(!err && response.statusCode === 200){
             let json = JSON.parse(body);
             let result = json['result'];
 
@@ -72,7 +68,7 @@ exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 
                     from: result[tmp]['from'],
                     to: result[tmp]['to']
                 }
-                if(result[tmp]['to'] == req.params.address){ //생성내역, 지금은 거래완료한 토큰도 보이는방식, 거래한토큰은 거르는식으로 구현해야함.
+                if(result[tmp]['to'] === req.params.address.toLowerCase()){ //생성내역, 지금은 거래완료한 토큰도 보이는방식, 거래한토큰은 거르는식으로 구현해야함.
                     create.push(txInfo);
                 }else{ //거래내역
                     deal.push(txInfo);
@@ -82,14 +78,14 @@ exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 
                 status: "Success",
                 createHistory: create,
                 dealHistory: deal
-            };
+            }
         }else{
             data = {
                 status: "Fail",
                 errMsg: "Fail to access API",
                 errDetail: err
             };
-        };
+        }
         res.send(JSON.stringify(data));
     });
 });

@@ -676,7 +676,7 @@ let db = fb.firestore();
 		global.admin_pk = admin_pk;
 	});
 
-exports.getMaskInfo = functions.https.onRequest((req, res)=>{
+exports.getMaskInfo = ((req, res)=>{
 	let maskNum = req.params.tokenId;
 	const result = contract.methods.Masks(tokenId).call()
 	.then((result) => {
@@ -697,7 +697,7 @@ exports.getMaskInfo = functions.https.onRequest((req, res)=>{
    
 });
 
-exports.MaskMaking = functions.https.onRequest((req, res)=>{ // param : uid
+exports.MaskMaking = ((req, res)=>{ // param : uid
 	let uid = req.params.uid;
 	
 	let usersRef = db.collection("users").doc(uid);
@@ -775,7 +775,7 @@ exports.MaskMaking = functions.https.onRequest((req, res)=>{ // param : uid
    
 });
 
-exports.dealMasks = functions.https.onRequest((req, res)=>{ //param: sender uid, receiver address, tokenId
+exports.dealMasks = ((req, res)=>{ //param: sender uid, receiver address, tokenId
 	let send_uid = req.params.send_uid; //보내는사람 uid
 	let recv_addr = req.params.recv_addr; //받는사람 지갑주소
 	let token_Id = req.params.token_id; //보낼 토큰 ID
@@ -848,7 +848,7 @@ exports.dealMasks = functions.https.onRequest((req, res)=>{ //param: sender uid,
 	});
 });
 
-exports.getStockList = functions.https.onRequest((req, res)=>{
+exports.getStockList = ((req, res)=>{
 	let uid = req.params.uid;
 	
 	let usersRef = db.collection("users").doc(uid);
@@ -861,22 +861,42 @@ exports.getStockList = functions.https.onRequest((req, res)=>{
 			from: admin_account,
 			gas: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
 		};
+		let arr = new Array();
 		contract.methods.tokenByList(account).call(callObject)
-			.then((result) => {
+			.then(async (result)=> {
+				const promise = result.map(async (val, index)=>{
+					let hi = await contract.methods.Masks(val).call(callObject);
+					let tmp = {
+						timeStamp: hi,
+						tokenId: val,
+						num: '1',
+					}
+					arr.push(tmp); 
+				});
+				Promise.all(promise).then(() => {
+					let data = {
+						status: "Success",
+						stock: arr
+					}
+					console.log(JSON.stringify(data));
+				});
+				return null;
+			})
+			.catch((err) => {
 				let data = {
-					status: "Success",
-					stock: result
+					status: "Fail",
+					errMsg: "Failed to get tokenByList",
+					errDetail: err
 				}
-				res.send(JSON.stringify(data));
+				console.log(JSON.stringify(data));
 			});
-		
 	})
 	.catch((err) => {
 		let data = {
 			status: "Fail",
 			errMsg: "Failed to check UID"
 		};
-		res.send(JSON.stringify(data));
+		console.log(JSON.stringify(data));
 	});
 });
 

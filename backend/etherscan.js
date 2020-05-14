@@ -2,13 +2,11 @@
 
 const request = require('request');
 const util = require('util');
-const functions = require('firebase-functions');
-
 
 const myApi = 'DI2QYXMJ7U1UY4G8AAE175TC33B3V3SGSE';
 const contractaddress = "0x2727b026EdB116B20196a1abF32e0cA8311E93e2";
 
-exports.normalTx = functions.https.onRequest((req, res)=>{
+exports.normalTx = ((req, res)=>{
     let url = util.format('http://api-ropsten.etherscan.io/api?module=account&action=txlist&address=%s&startblock=0&endblock=99999999&sort=asc&apikey=%s', req.params.address, myApi);
     console.log('start normalTx');
     request(url, function(err, response, body){
@@ -29,7 +27,7 @@ exports.normalTx = functions.https.onRequest((req, res)=>{
     });
 });
 
-exports.getTokenInfofromWallet = functions.https.onRequest((req, res)=>{
+exports.getTokenInfofromWallet = ((req, res)=>{
     let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
     request(url, function(err, response, body){
         let data = new Object();
@@ -49,7 +47,7 @@ exports.getTokenInfofromWallet = functions.https.onRequest((req, res)=>{
     });
 });
 
-exports.getMakerHistory = functions.https.onRequest((req, res)=>{ //제조사 생성내역, 거래내역 조회
+exports.getMakerHistory = ((req, res)=>{ //제조사 생성내역, 거래내역 조회
     let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
     let data = new Object();
     request(url, function(err, response, body){

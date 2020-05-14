@@ -9,7 +9,7 @@ const cors = require('cors');
 
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({origin: true}));
 /*
 성공
 status: "Success",

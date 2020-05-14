@@ -11,7 +11,7 @@ var firebaseConfig = {
 
 const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.WebsocketProvider('wss://ropsten.infura.io/ws/v3/df0ff335a16c463d96038903ff43987e'));
-const fb = require('firebase-functions');
+const fb = require('firebase');
 
 fb.initializeApp(firebaseConfig);
 
@@ -661,7 +661,7 @@ let contractAbi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-];
+]
 
 let contractAddress = "0x2727b026EdB116B20196a1abF32e0cA8311E93e2";
 
@@ -676,199 +676,50 @@ let db = fb.firestore();
 		global.admin_pk = admin_pk;
 	});
 
-exports.getMaskInfo = async function(req, res){
-   let maskNum = req.params.tokenId;
-   try{
-      const result = await contract.methods.Masks(tokenId).call();
-      console.log(result);
-      res.send(result);
-   }catch(err){
-      res.send("error");
-   }
+let uid = "CCRQFArEc9U5qXE0NCDcaR9qiPk1";
+	
+let usersRef = db.collection("users").doc(uid);
+
+usersRef.get().then(doc => {
+let account = doc.data().addr;
+
+const pk = Buffer.from(admin_pk,'hex');
+let callObject = {
+    from: admin_account,
+    gas: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
 };
-
-exports.MaskMaking = functions.https.onRequest((req, res) => { // param : uid
-	let uid = req.params.uid;
-	
-	let usersRef = db.collection("users").doc(uid);
-	usersRef.get().then(doc => {
-		if(!doc.exists){
-			let result = {
-				status: "Fail",
-				errMsg: "Don\'t exist user info"
-			}
-			res.send(JSON.stringify(result));
-
-		}else{
-			let maker_account = doc.data().addr;
-
-			const pk = Buffer.from(admin_pk,'hex');
-
-			let callObject = {
-				from: admin_account,
-				gas: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-			}
-			contract.methods.maskMaking(maker_account).call(callObject)
-				.then((result) => {
-					if(result == true){
-						web3.eth.getTransactionCount(admin_account, (err, txCount) =>{
-
-							const txObject = {
-								nonce: web3.utils.toHex(txCount),
-								to: contractAddress,
-								//value: web3.utils.toHex(web3.utils.toWei('0', 'ether')),
-								gasLimit: web3.utils.toHex(2100000),
-								gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-								data: contract.methods.maskMaking(maker_account).encodeABI()
-							};
-						
-							const tx = new Tx(txObject, {'chain':'ropsten'});
-							tx.sign(pk);
-						
-							const serializedTx = tx.serialize();
-							const raw = '0x' + serializedTx.toString('hex');
-							
-							web3.eth.sendSignedTransaction(raw)
-								.once('transactionHash', (hash) => {
-									let result = new Object();
-									result.status = 'Success'; //성공시
-									result.txUrl = 'https://ropsten.etherscan.io/tx/' + hash; //트랜잭션 조회 url
-									
-									res.send(JSON.stringify(result));
-								})
-								.on('error', (err) => {
-									let result = new Object();
-									result.status = 'Fail';
-									result.errMsg = 'Error to transaction sending';
-									result.errDetail = err;
-			
-									res.send(JSON.stringify(result));
-								});
-						});
-					}else{ //If result is not true
-						let data = {
-							status: "Fail",
-							errMsg: "Failed to make mask"
-						}
-						res.send(JSON.stringify(data));
-					};
-				});
-		};
-	}).catch((err)=>{
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID",
-			errDetail: err
-		}
-		res.send(JSON.stringify(data));
-	});
-   
+let arr = new Array();
+contract.methods.tokenByList(account).call(callObject)
+    .then(async (result)=> {
+        let arr = new Array();
+        for(let i=0; i<result.length; i++){
+            let hi = await contract.methods.Masks(result[i]).call(callObject);
+            let tmp = {
+                timeStamp: hi,
+                tokenId: result[i],
+                num: '1',s
+            }
+            arr.push(tmp); 
+        }
+        let data = {
+            status: "Success",
+            stock: arr
+        }
+        console.log(JSON.stringify(data));
+    })
+    .catch((err) => {
+        let data = {
+            status: "Fail",
+            errMsg: "Failed to get tokenByList",
+            errDetail: err
+        }
+        console.log(JSON.stringify(data));
+    });
+})
+.catch((err) => {
+    let data = {
+        status: "Fail",
+        errMsg: "Failed to check UID"
+    };
+    console.log(JSON.stringify(data));
 });
-
-exports.dealMasks = functions.https.onRequest((req, res) => { //param: sender uid, receiver address, tokenId
-	let send_uid = req.params.send_uid; //보내는사람 uid
-	let recv_addr = req.params.recv_addr; //받는사람 지갑주소
-	let token_Id = req.params.token_id; //보낼 토큰 ID
-
-	let usersRef = db.collection("users").doc(send_uid);
-	usersRef.get().then(doc => {
-		let account = doc.data().addr;
-		let privatekey = doc.data().privateKey;
-
-		const pk = Buffer.from(privatekey,'hex');
-		const data = contract.methods.dealMasks(recv_addr, token_Id); //컨트랙트에서 리턴값받아서 보낼수있는지없는지 체크 예정
-
-		let callObject = {
-			from: account,
-			gas: web3.utils.toHex(web3.utils.toWei('10', 'gwei'))
-		};
-	
-		contract.methods.dealMasks(recv_addr, token_Id).call(callObject)
-			.then((result) => {
-				if(result == true){
-					web3.eth.getTransactionCount(account, (err, txCount) =>{
-
-						const txObject = {
-							nonce: web3.utils.toHex(txCount),
-							to: contractAddress,
-							//value: web3.utils.toHex(web3.utils.toWei('0', 'ether')),
-							gasLimit: web3.utils.toHex(2100000),
-							gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-							data: contract.methods.dealMasks(recv_addr, token_Id).encodeABI()
-						};
-						const tx = new Tx(txObject, {'chain':'ropsten'});
-						tx.sign(pk);
-					
-						const serializedTx = tx.serialize();
-						const raw = '0x' + serializedTx.toString('hex');
-					
-						web3.eth.sendSignedTransaction(raw)
-							.once('transactionHash', (hash) => {
-								let data = {
-									status: "Success",
-									txUrl: "transactionHash: https://ropsten.etherscan.io/tx/" + hash
-								}
-								res.send(JSON.stringify(data));
-							})
-							.on('error', (err) =>{
-								let data = {
-									status: "Fail",
-									errMsg: "Check your token in stock",
-									errDetail: err
-								}
-								res.send(JSON.stringify(data));
-							});
-					});
-
-				}else{
-					let data = {
-						status: "Fail",
-						errMsg: "Return to revert from dealMasks in contract"
-					}
-					res.send(JSON.stringify(data));
-				}
-			});
-	})
-	.catch((err) => {
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID"
-		};
-		res.send(JSON.stringify(data));
-	});
-});
-
-exports.getStockList = functions.https.onRequest((req, res) => {
-	let uid = req.params.uid;
-	
-	let usersRef = db.collection("users").doc(uid);
-
-	usersRef.get().then(doc => {
-		let account = doc.data().addr;
-
-		const pk = Buffer.from(admin_pk,'hex');
-		let callObject = {
-			from: admin_account,
-			gas: web3.utils.toHex(web3.utils.toWei('20', 'gwei'))
-		};
-		contract.methods.tokenByList(account).call(callObject)
-			.then((result) => {
-				let data = {
-					status: "Success",
-					stock: result
-				}
-				res.send(JSON.stringify(data));
-			});
-		
-	})
-	.catch((err) => {
-		let data = {
-			status: "Fail",
-			errMsg: "Failed to check UID"
-		};
-		res.send(JSON.stringify(data));
-	});
-});
-
-//MaskMaking('maker A', '0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67');
-//dealMasks('0xc2988556Ae24daF3A20B16d3EB4D970E43e3546D', '7D88DB82FA83B7A1418FEB4A291496E0D72DDD08E8D15162B666A12043EC6F67', '0xb93428830a28aD774DB9A3937fC8962fb4429785', '2')
