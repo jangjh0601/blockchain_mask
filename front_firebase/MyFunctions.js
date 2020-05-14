@@ -16,3 +16,22 @@ function ValidateCivilNumber(civilNumber){
   }
   return true;
 }
+function IsSuccessOrFail(data) {
+  if (data.status === "Fail") {
+    alert('실패');
+  } else {
+    alert('성공');
+  }
+}
+
+function sortByDate(data) {
+  data.sort((a,b) =>  {
+
+    return b.time - a.time;
+
+  });
+}
+//계좌와 업체이름 매핑 시켜주는 함수
+function addrToName(){
+
+}

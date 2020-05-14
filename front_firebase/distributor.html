@@ -2,19 +2,9 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <script src="./MyFunctions.js"></script>
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-  </script>
-
 
   <meta charset="utf-8">
   <title>Dsitributor Page</title>
@@ -84,7 +74,7 @@
                       <input type="text" class="form-control" id="toSeller" placeholder="판매사1">
 
 
-                      <button type="submit" class="btn btn-outline-dark" id="sendMask" onclick="SendMask()">보내기</button>
+                      <button type="button" class="btn btn-outline-dark" id="sendMask" onclick="SendMask()">보내기</button>
                     </div>
                   </form>
                 </div>
@@ -157,7 +147,7 @@
                             <th>개수</th>
                           </tr>
                         </thead>
-                        <tbody id="saledHistoryTbody">
+                        <tbody id="salesHistoryTbody">
 
                         </tbody>
                       </table>
@@ -175,6 +165,16 @@
     </div>
   </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+  <script src="./myfunctions.js"></script>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
@@ -191,23 +191,38 @@
     userSessionCheck();
   </script>
   <script type="text/javascript">
-    function SendMask() {
-      var serialNumber = document.getElementById("serialNumber1");
-      var toSeller = document.getElementById("toSeller");
-      //var count = document.getElementById("count1");
-
-      //위의 변수를 가지고 web3를 통해 컨트랙트 함수 실행
-    }
     //재고내역 테이블 만드는 함수
     function MakeInventoryTable() {
       var myTbody = document.getElementById("salesHistoryTbody");
       var ourRequest = new XMLHttpRequest();
       ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/stockList/' +
-        userAddr);
+        firebaseEmailAuth.currentUser.uid);
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
         renderInventoryHTML(ourData);
+        //테이블 행 클릭시 해당 정보 가져오는 JQuery  
+        $("#inventoryTable tr").click(function () {
+
+          var str = "";
+          var tdArr = new Array(); // 배열 선언
+
+          // 현재 클릭된 Row(<tr>)
+          var tr = $(this);
+          var td = tr.children();
+
+          // tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
+          console.log("클릭한 Row의 모든 데이터 : " + tr.text());
+
+          // 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
+          td.each(function (i) {
+            tdArr.push(td.eq(i).text());
+          });
+
+          $('#serialNumber1').val(tdArr[1]);
+
+
+        });
       };
       ourRequest.send();
     }
@@ -220,7 +235,7 @@
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
-        renderRecieptHistoryHTML(ourData);
+        renderReceiptHistoryHTML(ourData);
       };
       ourRequest.send();
     }
@@ -240,28 +255,7 @@
     }
   </script>
   <script>
-    //테이블 행 클릭시 해당 정보 가져오는 JQuery  
-    $("#inventoryTable tr").click(function () {
 
-      var str = "";
-      var tdArr = new Array(); // 배열 선언
-
-      // 현재 클릭된 Row(<tr>)
-      var tr = $(this);
-      var td = tr.children();
-
-      // tr.text()는 클릭된 Row 즉 tr에 있는 모든 값을 가져온다.
-      console.log("클릭한 Row의 모든 데이터 : " + tr.text());
-
-      // 반복문을 이용해서 배열에 값을 담아 사용할 수 도 있다.
-      td.each(function (i) {
-        tdArr.push(td.eq(i).text());
-      });
-
-      $('#serialNumber1').val(tdArr[1]);
-
-
-    });
   </script>
 
   <script>
@@ -285,17 +279,11 @@
 
     }
 
-    function IsSuccessOrFail(data) {
-      if (data.status === "fail") {
-        alert('실패');
-      } else {
-        alert('성공');
-      }
-    }
 
-    function renderRecieptHistoryHTML(data) {
+    function renderReceiptHistoryHTML(data) {
+      console.log("rednerReceiptHistoryHTML 실행");
       var htmlString = "";
-
+      sortByDate(data.createHistory);
       for (i = 0; i < data.createHistory.length; i++) {
         htmlString += "<tr><td>" + new Date(data.createHistory[i].time * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.createHistory[i].tokenId + "</td>";
@@ -303,12 +291,13 @@
         htmlString += "<td>" + data.createHistory[i].to + "</td>";
         htmlString += "<td>" + data.createHistory[i].num + "</td></tr>";
       }
-      $("receiptHistoryTbody").append(htmlString);
+      $("#receiptHistoryTbody").append(htmlString);
     }
 
     function renderInventoryHTML(data) {
+      console.log("renderInventoryHTML 실행");
       var htmlString = "";
-
+      sortByDate(data.stock);
       for (i = 0; i < data.stock.length; i++) {
         htmlString += "<tr><td>" + new Date(data.stock[i].timeStamp * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.stock[i].tokenId + "</td>";
@@ -318,8 +307,9 @@
     }
 
     function renderSalesHistoryHTML(data) {
+      console.log("renderSalesHistoryHTML 실행");
       var htmlString = "";
-
+      sortByDate(data.dealHistory);
       for (i = 0; i < data.dealHistory.length; i++) {
         htmlString += "<tr><td>" + new Date(data.dealHistory[i].time * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.dealHistory[i].tokenId + "</td>";
@@ -348,6 +338,7 @@
             console.log(user.email + " 님이 로그인했습니다." + " 계좌 : " + userAddr + " 이름 :" + userName);
             MakeSalesHistoryTable();
             MakeReceiptHistoryTable();
+            MakeInventoryTable();
           } else {
             // doc.data() will be undefined in this case
             console.log("No such document!");

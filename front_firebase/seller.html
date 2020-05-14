@@ -3,19 +3,10 @@
 
 <head>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="./MyFunctions.js"></script>
+  
+ 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-  </script>
 
   <meta charset="utf-8">
   <title>Seller Page</title>
@@ -176,7 +167,17 @@
     </div>
   </div>
   <br><br>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+  </script>
+ <script src="./myfunctions.js"></script>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
@@ -198,7 +199,7 @@
       var myTbody = document.getElementById("salesHistoryTbody");
       var ourRequest = new XMLHttpRequest();
       ourRequest.open('GET', 'https://us-central1-maskproject-6e385.cloudfunctions.net/maskSaver/stockList/' +
-        userAddr);
+      firebaseEmailAuth.currentUser.uid);
       ourRequest.onload = function () {
         var ourData = JSON.parse(ourRequest.responseText);
         console.log(ourData);
@@ -208,7 +209,7 @@
     }
     function renderInventoryHTML(data) {
       var htmlString = "";
-
+      sortByDate(data.stock);
       for (i = 0; i < data.stock.length; i++) {
         htmlString += "<tr><td>" + new Date(data.stock[i].timeStamp * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.stock[i].tokenId + "</td>";
@@ -230,9 +231,9 @@
       ourRequest.send();
     }
     
-    function renderRecieptHistoryHTML(data) {
+    function renderReceiptHistoryHTML(data) {
       var htmlString = "";
-
+      sortByDate(data.createHistory);
       for (i = 0; i < data.createHistory.length; i++) {
         htmlString += "<tr><td>" + new Date(data.createHistory[i].time * 1000).toLocaleString() + "</td>";
         htmlString += "<td>" + data.createHistory[i].tokenId + "</td>";
@@ -240,7 +241,7 @@
         htmlString += "<td>" + data.createHistory[i].to + "</td>";
         htmlString += "<td>" + data.createHistory[i].num + "</td></tr>";
       }
-      $("receiptHistoryTbody").append(htmlString);
+      $("#receiptHistoryTbody").append(htmlString);
     }
     //구매자 리스트 테이블 만드는 함수
     function MakeBuyerListTable() {
@@ -251,14 +252,7 @@
       GetDataFromDB()
     }
 
-    function ValidateCivilNumber(civilNumber) {
-      if (civilNumber.charAt(6) != "-") {
-        return false;
-      } else if (civilNumber.length != 14) {
-        return false;
-      }
-      return true;
-    }
+
     //구매자가 구매할 수 있는지 확인하는 함수
     function CanPurchase() {
 
@@ -494,26 +488,6 @@
 
   <script>
 
-    // function renderMakeReceiptHistoryHTML(data) {
-    //   var htmlString = "";
-
-    //   for (i = 0; i < data.dealHistory.length; i++) {
-    //     htmlString += "<tr><td>" + new Date(data.dealHistory[i].time * 1000).toLocaleString() + "</td>";
-    //     htmlString += "<td>" + data.dealHistory[i].tokenId + "</td>";
-    //     htmlString += "<td>" + data.dealHistory[i].dealer + "</td>";
-    //     htmlString += "<td>" + data.dealHistory[i].seller + "</td>";
-    //     htmlString += "<td>" + data.dealHistory[i].nnum + "</td></tr>";
-    //   }
-    //   $("#receiptHistoryTbody").append(htmlString);
-    // }
-
-    function IsSuccessOrFail(data) {
-      if (data.status === "fail") {
-        alert('실패');
-      } else {
-        alert('성공');
-      }
-    }
     //마스크 토큰 없애는 함수. 판매완료됬을때 실행
     function BurnMask() {
       var serialNumber = document.getElementById("serialNumber2").value;
