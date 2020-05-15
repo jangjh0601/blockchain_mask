@@ -909,7 +909,7 @@ exports.getStockList = functions.https.onRequest((req, res) => {
 				const promise = result.map(async (val, index)=>{
 					let hi = await contract.methods.Masks(val).call(callObject);
 					let tmp = {
-						timeStamp: hi,
+						time: hi,
 						tokenId: val,
 						num: '1',
 					}
