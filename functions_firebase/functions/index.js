@@ -34,6 +34,6 @@ app.get('/stockList/:uid', contract_api.getStockList); //재고확인,
 //etherscan.js
 app.get('/normalTx/:address', etherscan_api.normalTx); //트랜잭션조회
 app.get('/tokenInfo/:address', etherscan_api.getTokenInfofromWallet);//지갑주소의 토큰거래내역 조회
-app.get('/makerhistory/:address', etherscan_api.getMakerHistory); // 제조사 생성내역, 거래내역조회, json return
+app.get('/makerhistory/:address', etherscan_api.getHistory); // 제조사 생성내역, 거래내역조회, json return
 
 exports.maskSaver = functions.https.onRequest(app);

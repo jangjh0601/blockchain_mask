@@ -48,7 +48,7 @@ exports.getTokenInfofromWallet = functions.https.onRequest((req, res) => {
     });
 });
 
-exports.getMakerHistory = functions.https.onRequest((req, res) => { //제조사 생성내역, 거래내역 조회
+exports.getHistory = functions.https.onRequest((req, res) => { //제조사 생성내역, 거래내역 조회
     let url = util.format('https://api-ropsten.etherscan.io/api?module=account&action=tokennfttx&contractaddress=%s&address=%s&page=1&offset=100&sort=asc&apikey=%s', contractaddress, req.params.address, myApi);
     let data = new Object();
     request(url, (err, response, body) => {
