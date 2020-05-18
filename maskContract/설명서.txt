@@ -1,0 +1,59 @@
+############
+필요한 설명들
+############
+
+struct Mask -> 마스크 구조체 배열로 사용할 녀석 / 제조사 이름과 제조사 주소, 만들어진 날짜 포함 
+
+Mask[] public Masks; -> 마스크 구조체 배열
+
+uint256[] public maskIDIntList; -> 토큰 넘버를 가진 마스크가 생성될때마다 기록되는 리스트
+
+address public owner; -> 컨트랙트 주소
+
+constructor() public ERC721("Mask", "MSK") -> 토큰 이름 토큰 심볼, 오너를 컨트랙트 생성자로 설정
+
+event Makemask(uint256 indexed tokenId, string indexed _name, address indexed _account, string _Message);
+// 마스크 만들때 이벤트 / indexed로 토픽으로 관리 할 수 있다고 함.
+
+event DealEvent(address _from, address _to, uint256 _tokenId, uint256 _amount, string _Message);
+// 토픽으로 관리하기 위해 indexed 가 필요할텐데 좀 더 알아보기. web3에서 사용하는 방법이 있는듯 필터로?
+
+event SellEvent(address _from, uint256 _tokenId, string _Message);
+// 마스크 판매 이벤트
+
+event Illegal(address _from, uint256 _tokenId);
+// 불법인지 만든지 5일인가 지났는데 안팔면 불법되는거 이벤트
+
+##################
+필요하고 쓰는 함수들
+##################
+
+ function _maskMaking(string memory _manuname) public 
+ => 마스크 만드는 함수 (_manuname == 만든 공장이름) 
+ 
+ function dealMasks(address _to, uint256 _tokenId, uint256 _amount) public
+ => 마스크 전송하는 함수 (제조사->유통사, 유통사-> 유통사 , 유통사 -> 판매사)
+ =? for문을 사용해서 5000개씩 보낼수도 있을거 같기도 하고? 웹에서 반복문 처리해서 10개 트랜젝션
+ =? 만드는게 나을거 같기도 하고.
+ 
+ function sellMasks(address _from, address _collect, uint256 _tokenId) public
+ => 판매되면 500개 단위로 모아서 어떤 지갑(_collect라는 새로운 지갑) 하나로 모아주는거 or 토큰 소각
+ 
+ function burnToken(uint256 _tokenId) public
+ => 위에서 소각하면 이거 씀
+ 
+ function checkDate(uint256 _tokenId) public returns (bool)
+ => 5일 지났는지 확인/ 5일인가? 몇일이었찌
+ 
+ function checkDate60(uint256 _tokenId) public view returns (bool)
+ => 만든지 60일 지나면 아무도 조회 안할거같아서 그때 소각하려고 했었음 / 논의 필요
+ 
+ function maskListReturn(uint256 _number) public view returns (uint256)
+ => 어떤 마스크 토큰 넘버 존재하는지 _number 입력하면 return maskIDIntList[_number]; 해주는거.
+ 
+ 
+ ##########################################################################################
+ 
+ https://ropsten.etherscan.io/address/0xbb15b5c03c59a72cc8b586a0d9edcca5e36b9397
+ 
+ 이 주소에 테스트 과정이 좀 담겨있음  // 이벤트 깔끔하게 보이는거 indexed 로 하면 될거같아서 시도중

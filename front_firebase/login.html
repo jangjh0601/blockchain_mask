@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" style=" height: 100%;">
+    <meta charset="utf-8">
+    <head>
+      <style> 
+      body{
+        height: 100%;
+    color: #111;
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+  }</style>
+            <script src="./MyFunctions.js"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <!-- 합쳐지고 최소화된 최신 CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    <title>로그인 페이지</title>
+   
+   
+  </head>
+  <!-- 로그인폼 -->
+<body >
+    <!-- <div class="row">
+  <div class="col-md-offset-3">
+    <form class="form-inline">
+<div class="form-group">
+  <label class="sr-only" for="email">Email address</label>
+  <input type="email" class="form-control" id="email" placeholder="Enter email">
+</div>
+<div class="form-group">
+  <label class="sr-only" for="password">Password</label>
+  <input type="password" class="form-control" id="password" placeholder="Password">
+</div>
+<button type="submit" class="btn btn-default login">Sign in</button>
+</form>
+  </div>
+</div> -->
+<!-- 가입 폼 시작 -->
+
+<div class="container" style="align-items: center ;padding-top: 5em;">
+        <h1>마스크 관리 시스템 통합 로그인 페이지</h1>
+
+        <div class="form-group">
+          <label for="email">Email address:</label>
+          <input type="email" class="form-control" id="email">
+        </div>
+
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="pwd">
+        </div>
+
+        <button type="button" class="btn btn-default login">로그인</button>
+
+        <p>제조사A : test1@test.com</p>
+        <p>판매사A : test2@test.com</p>
+        <p>유통사A : test3@test.com</p>
+        <p>제조사B : test4@test.com</p>
+        <p>유통사B : test5@test.com</p>
+        <p>유통사C : test6@test.com</p>
+        <p>판매사B : test7@test.com</p>
+        <p>비밀번호 : 111111</p>
+    </div>
+
+<!-- 로그인폼 끝 -->
+
+    <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+         https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+<script src="./firebaseInit.js"></script>
+    <script>
+      var firebaseEmailAuth; //파이어베이스 email 인증 모듈 전역변수
+   var firebaseDatabase; //파이어베이스 db 모듈 전역변수
+   var userInfo; //가입한 유저의 정보. object 타입
+
+
+    firebaseEmailAuth = firebase.auth(); //파이어베이스 인증 객체
+    var db = firebase.firestore();
+
+
+
+    //제이쿼리를 사용한다.
+    $(document).ready(function(){
+
+      //가입버튼 눌렀을 때
+      $(document).on('click','.login',function(){
+
+        //제이쿼리 선택자와 val() 함수를 이용해서 이메일,비밀번호 값을 가져온다.
+        var email = $('#email').val();
+        var password = $('#pwd').val();
+        //alert("로그인 버튼 눌렸음" + email +":"+ password);
+
+    //파이어베이스 이메일 로그인 함수
+    firebaseEmailAuth.signInWithEmailAndPassword(email, password)
+   .then(function(firebaseUser) {
+
+       //성공하면 firebaseUser에 유저 정보 값이 담겨 넘어온다.
+       loginSuccess(firebaseUser);
+
+   })
+  .catch(function(error) {
+       // 실패했을 때 에러 처리
+       alert(error);
+       alert("로그인 실패");
+  });
+
+      });
+    });
+
+    //로그인 성공했을 때
+    function loginSuccess(firebaseUser){
+       alert("로그인 성공");
+
+    //로그인 성공한 유저 id 확인해 보기 - firebase database에 접근해서 데이터 조회 하는 함수
+    var docRef = db.collection("users").doc(firebaseEmailAuth.currentUser.uid);
+
+  docRef.get().then(function(doc) {
+      if (doc.exists) {
+        alert(doc.data().index);
+          if(doc.data().index == "seller"){
+            window.location.href = "/seller.html";
+          }
+          else if (doc.data().index == "manufacturer") {
+            window.location.href = "/manufacturer.html"
+          }
+          else if(doc.data().index == "distributor"){
+            window.location.href = "/distributor.html"
+          }
+          else{
+            alert("불가!")
+          }
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+  }).catch(function(error) {
+      console.log("Error getting document:", error);
+  });
+
+
+
+    }
+
+
+    </script>
+
+  </body>
+</html>
